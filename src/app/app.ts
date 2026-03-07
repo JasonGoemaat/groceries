@@ -8,5 +8,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
+  protected isCollapsed = signal(true);
   protected readonly title = signal('groceries');
 }
