@@ -1,0 +1,64 @@
+<nav class="second">
+    <ul>
+        <!-- NOTE: Need to prevent default, also updated provideRouter in app.config.ts -->
+        <li><a [routerLink]="['./']" fragment="font-family">Family</a></li>
+        <li><a [routerLink]="['./']" fragment="font-size">Size</a></li>
+        <li><a [routerLink]="['./']" fragment="buttons">Buttons</a></li>
+    </ul>
+</nav>
+
+<div class="content">
+
+    <!-- FONT FAMILIES -->
+    <div class="anchor" id="font-family"></div>
+    <section>
+        <h2 class="text-3xl"><a href="https://tailwindcss.com/docs/font-family">Font Family</a></h2>
+        <p>Flowbite uses the <a href="https://fonts.google.com/specimen/Inter" target="_blank"
+                class="text-blue-500">Inter</a> font family by default.</p>
+    </section>
+
+    <!-- FONT SIZES -->
+    <div class="anchor" id="font-size"></div>
+    <section>
+        <h2 class="text-3xl"><a href="https://tailwindcss.com/docs/font-size">Font Size</a></h2>
+        <div class="horizontal-list">
+            <p class="text-xs">.text-xs</p>
+            <p class="text-sm">.text-sm</p>
+            <p class="text-base">.text-base</p>
+            <p class="text-lg">.text-lg</p>
+            <p class="text-xl">.text-xl</p>
+            <p class="text-2xl">.text-2xl</p>
+            <p class="text-3xl">.text-3xl</p>
+            <p class="text-4xl">.text-4xl</p>
+            <p class="text-5xl">.text-5xl</p>
+            <p class="text-6xl">.text-6xl</p>
+        </div>
+    </section>
+
+    <!-- BUTTONS -->
+    <div class="anchor" id="buttons"></div>
+    <section>
+        <h2 class="text-3xl"><a href="https://flowbite-angular.com/docs/components/button">Buttons</a></h2>
+        <p>Created like so:</p>
+        <pre>
+            &lt;button flowbiteButton color="info"&gt;info%lt;/button&gt;
+        </pre>
+        <div class="horizontal-list">
+            <button flowbiteButton>default</button>
+            <button flowbiteButton color="info">
+                info
+            </button>
+            <button flowbiteButton color="failure">
+                failure
+            </button>
+            <button flowbiteButton color="success">
+                success
+            </button>
+            <button flowbiteButton color="warning">
+                warning
+            </button>
+            <button flowbiteButton color="primary">
+                primary
+            </button>
+        </div>
+    </section>
