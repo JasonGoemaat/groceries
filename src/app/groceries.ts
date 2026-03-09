@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GroceryList } from './groceries-info';
+import { GroceryList } from './grocery-list-service';
 
 export const GroceryListsKey = 'grocery-lists';
 
@@ -15,12 +15,12 @@ export class Groceries {
     try {
       let lists = JSON.parse(json);
       lists.forEach((list: GroceryList) => {
-        if (typeof list.createdAt === 'string') {
-          const oldCreatedAt = list.createdAt;
-          list.createdAt = new Date(list.createdAt);
+        if (typeof list.created === 'string') {
+          const oldCreatedAt = list.created;
+          list.created = new Date(list.created);
         }
-        if (typeof list.modifiedAt === 'string') {
-          list.modifiedAt = new Date(list.modifiedAt);
+        if (typeof list.updated === 'string') {
+          list.updated = new Date(list.updated);
         }
       });
       return Promise.resolve(<GroceryList[]>lists);

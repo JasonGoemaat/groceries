@@ -1,0 +1,29 @@
+<h1>Test Grocery List Service</h1>
+<div class="test-container">
+    @if (lists().length === 0) {
+        <p>No lists found</p>
+    } @else {
+        <div>
+            Lists:
+            <ul>
+                @for (list of lists(); track list.id) {
+                    <li><a href="#" (click)="selectList(list, $event)">{{ list.name }}</a></li>
+                }
+            </ul>
+        </div>
+    }
+    @if (list() !== null) {
+        <div>
+            List: {{ list()?.name }}
+        </div>
+    } @else {
+        <p>Select a list</p>
+    }
+</div>
+
+<style>
+    /* NOTE: need to reference css for variables in module here */
+    /* https://tailwindcss.com/docs/functions-and-directives#reference-directive */
+    @reference "../../app.css";
+    /* .btn { @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full; } */
+</style>
