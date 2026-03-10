@@ -1,19 +1,20 @@
-@reference "../../app.css"
+/* @reference "../../app.css" */
 
 nav.second {
     position: fixed;
-    top: 64px;
+    top: 65px;
     height: 64px;
+    border-bottom: solid 1px black;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
 }
 
 nav.second > ul {
     display: flex;
     gap: 20px;
     flex-direction: row;
+    justify-content: center;
 }
 
 nav.second > ul > li {
@@ -54,4 +55,11 @@ section {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+}
+
+pre.roomy {
+    padding: 12px;
+    padding-left: 20px;
+    background-color: #cccccc;
+    border-radius: 8px;
 }

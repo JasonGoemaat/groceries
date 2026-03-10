@@ -14,7 +14,6 @@ export class TestGroceryListService {
 
   constructor(public groceryListService: GroceryListService) {
     groceryListService.getLists().then(result => this.lists.set(result()));
-    const a = signal([1,2,3]);
   }
 
   selectList(list: GroceryList, event: MouseEvent) {
