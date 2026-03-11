@@ -1,0 +1,180 @@
+<nav class="second fixed bg-white w-full z-20 flex flex-row items-center content-center gap-4">
+    <ul>
+        <!-- NOTE: Need to prevent default, also updated provideRouter in app.config.ts -->
+        <li><a [routerLink]="['./']" fragment="font-family">Family</a></li>
+        <li><a [routerLink]="['./']" fragment="font-size">Size</a></li>
+        <li><a [routerLink]="['./']" fragment="buttons">Buttons</a></li>
+        <li><a [routerLink]="['./']" fragment="cards">Cards</a></li>
+        <li><a [routerLink]="['./']" fragment="forms">Forms</a></li>
+    </ul>
+</nav>
+
+<div class="content">
+    <!-- FONT FAMILIES -->
+    <div class="anchor" id="font-family"></div>
+    <section class="flex flex-col items-center content-center gap-4">
+        <h2 class="text-3xl"><a href="https://tailwindcss.com/docs/font-family">Font Family</a></h2>
+        <p>Flowbite uses the <a href="https://fonts.google.com/specimen/Inter" target="_blank"
+                class="text-blue-500">Inter</a> font family by default.</p>
+    </section>
+
+    <!-- FONT SIZES -->
+    <div class="anchor" id="font-size"></div>
+    <section class="flex flex-col items-center content-center gap-4">
+        <h2 class="text-3xl"><a href="https://tailwindcss.com/docs/font-size">Font Size</a></h2>
+        <div class="horizontal-list">
+            <p class="text-xs">.text-xs</p>
+            <p class="text-sm">.text-sm</p>
+            <p class="text-base">.text-base</p>
+            <p class="text-lg">.text-lg</p>
+            <p class="text-xl">.text-xl</p>
+            <p class="text-2xl">.text-2xl</p>
+            <p class="text-3xl">.text-3xl</p>
+            <p class="text-4xl">.text-4xl</p>
+            <p class="text-5xl">.text-5xl</p>
+            <p class="text-6xl">.text-6xl</p>
+        </div>
+    </section>
+
+    <!-- BUTTONS -->
+    <div class="anchor" id="buttons"></div>
+    <section class="flex flex-col items-center content-center gap-4">
+        <h2 class="text-3xl"><a href="https://flowbite-angular.com/docs/components/button">Buttons</a></h2>
+        <p>Created like so:</p>
+        <pre>
+            &lt;button flowbiteButton color="info"&gt;info&lt;/button&gt;
+        </pre>
+        <div class="horizontal-list mb-4 mt-4">
+            <button flowbiteButton>default</button>
+            <button flowbiteButton color="info">
+                info
+            </button>
+            <button flowbiteButton color="failure">
+                failure
+            </button>
+            <button flowbiteButton color="success">
+                success
+            </button>
+            <button flowbiteButton color="warning">
+                warning
+            </button>
+            <button flowbiteButton color="primary">
+                primary
+            </button>
+        </div>
+        <p>You can add attributes `pill` and `outline` for different looks:</p>
+        <div class="horizontal-list mb-4 mt-4">
+            <button flowbiteButton pill>default</button>
+            <button flowbiteButton pill color="info">
+                info
+            </button>
+            <button flowbiteButton pill color="failure">
+                failure
+            </button>
+            <button flowbiteButton pill color="success">
+                success
+            </button>
+            <button flowbiteButton pill color="warning">
+                warning
+            </button>
+            <button flowbiteButton pill color="primary">
+                primary
+            </button>
+        </div>
+        <div class="horizontal-list mb-4 mt-4">
+            <button flowbiteButton outline>default</button>
+            <button flowbiteButton outline color="info">
+                info
+            </button>
+            <button flowbiteButton outline color="failure">
+                failure
+            </button>
+            <button flowbiteButton outline color="success">
+                success
+            </button>
+            <button flowbiteButton outline color="warning">
+                warning
+            </button>
+            <button flowbiteButton outline color="primary">
+                primary
+            </button>
+        </div>
+
+        <p>And specify values for the `size` attribute:</p>
+        <div class="horizontal-list mb-4 mt-4">
+            <button flowbiteButton outline color="info" size="xs">
+                size="xs"
+            </button>
+            <button flowbiteButton outline color="info" size="sm">
+                size="sm"
+            </button>
+            <button flowbiteButton outline color="info" size="md">
+                size="md"
+            </button>
+            <button flowbiteButton outline color="info" size="lg">
+                size="lg"
+            </button>
+            <button flowbiteButton outline color="info" size="xl">
+                size="xl"
+            </button>
+        </div>
+
+    </section>
+
+    <!-- CARDS -->
+    <div class="anchor" id="cards"></div>
+    <section class="flex flex-col items-center content-center gap-4">
+        <h2 class="text-3xl"><a href="https://flowbite-angular.com/docs/components/card">Cards</a></h2>
+        <p>Create cards like so:</p>
+        <pre class="text-xs roomy fit-content">{{ samples.card }}</pre>
+        <div flowbiteCard color="failure" size="xl">
+            <div flowbiteCardContent>
+                <h5 flowbiteCardHeader>Noteworthy technology acquisitions 2021</h5>
+                <p>
+                    Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
+                    chronological order.
+                </p>
+                <p>
+                    You can set 'color' on the card which only affects the
+                    header and the very small faint border.  You can also set
+                    the 'size' which affects the width of the card (xs, sm, md, lg, xl)
+                    by using the helper 'max-w' classes.   i.e. setting
+                    `size="xl"` will use `max-w-xl`)
+                </p>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMS -->
+    <div class="anchor" id="forms"></div>
+    <section class="flex flex-col items-center gap-4">
+        <h2 class="text-3xl"><a href="https://flowbite-angular.com/docs/components/input">Forms</a></h2>
+        <p>Create forms like so:</p>
+        <pre class="text-xs roomy m-8">{{ samples.form }}</pre>
+
+        <form class="mx-auto max-w-sm">
+            <div flowbiteFormField>
+                <label flowbiteLabel for="email">
+                    Email address
+                </label>
+                <input flowbiteFormControl id="email" name="email" placeholder="email@flowbite-angular.com" />
+                <p flowbiteHelper>
+                    We’ll never share your details. Read our
+                    <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                        Privacy Policy
+                    </a>
+                    .
+                </p>
+            </div>
+            <div flowbiteFormField>
+                <label flowbiteLabel for="password">
+                    Password
+                </label>
+                <input flowbiteFormControl id="password" name="password" placeholder="•••••••••" />
+            </div>
+            <button flowbiteButton color="info" type="submit" class="w-full">
+                Submit
+            </button>
+        </form>
+    </section>

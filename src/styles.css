@@ -1,3 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@source "../node_modules/flowbite-angular";
+
+@theme {
+  --color-primary-50: #fff0f1;
+  --color-primary-100: #ffe1e4;
+  --color-primary-200: #ffc8cf;
+  --color-primary-300: #ff9ba8;
+  --color-primary-400: #ff637b;
+  --color-primary-500: #ff2c51;
+  --color-primary-600: #f6083b;
+  --color-primary-700: #c3002f;
+  --color-primary-800: #ae0331;
+  --color-primary-900: #940732;
+  --color-primary-950: #5b041e;
+}
+
+.my-bg-dark {
+  background-color: lab(3.92% 2.06 5.9 / 0.68);
+}
