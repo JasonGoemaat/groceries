@@ -1,10 +1,11 @@
-<div class="flex flex-col gap-4 items-center">
-    <h1 class="text-3xl">Test Grocery List Service</h1>
+<div class="flex flex-col gap-4 items-center w-full">
+    <h1 class="text-6xl text-white text-center w-full my-bg-dark p-4 rounded-4xl">
+        <a [routerLink]="['/']">Groceries</a></h1>
     @if (lists().length === 0) {
     <p>No lists found</p>
     } @else {
 
-    <div class="flex gap-4 items-center content-center">
+    <div class="flex gap-4 items-center content-center my-bg-dark p-16" style="padding: 16px; border-radius: 24px;">
         @for (list of lists(); track list.id) {
             <button flowbiteButton (click)="selectList(list)" size="xs" pill>{{ list.name }}</button>
         }
@@ -21,7 +22,7 @@
         }
     </div>
     } @else {
-    <p class="text-md">Select a list above or click 'Create'</p>
+    <p class="text-md text-white">Select a list above or click 'Create'</p>
     }
 </div>
 
@@ -31,4 +32,10 @@
     /* TODO: Figure this out, this doesn't work.   Shouldn't be needed even? */
     @reference "../../app.css";
     /* .btn { @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full; } */
+
+    :host {
+        display: block;
+        flex-grow: 1;
+
+    }
 </style>

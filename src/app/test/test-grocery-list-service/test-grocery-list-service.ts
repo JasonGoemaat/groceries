@@ -5,10 +5,11 @@ import { Button } from 'flowbite-angular/button';
 import { LiveCollection } from './LiveCollection';
 import { DataService } from '../../data-service';
 import { TGLSGroceryList } from './tglsgrocery-list/tglsgrocery-list';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-test-grocery-list-service',
-  imports: [Button, TGLSGroceryList, JsonPipe],
+  imports: [Button, TGLSGroceryList, JsonPipe, RouterLink],
   templateUrl: './test-grocery-list-service.html',
   styleUrl: './test-grocery-list-service.css',
   providers: [GroceryListService, DataService],

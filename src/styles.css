@@ -17,3 +17,7 @@
   --color-primary-900: #940732;
   --color-primary-950: #5b041e;
 }
+
+.my-bg-dark {
+  background-color: lab(3.92% 2.06 5.9 / 0.68);
+}
