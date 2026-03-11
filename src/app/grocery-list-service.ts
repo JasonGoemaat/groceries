@@ -14,7 +14,7 @@ export interface GroceryListItem {
   id: string;
   listId: string;
   itemName: string;
-  quantity: number;
+  quantity: string;
   done: boolean;
   archived: boolean;
   created: number;
@@ -27,10 +27,10 @@ let sampleGroceryLists: GroceryList[] = [
 ];
 
 let sampleGroceryListItems: GroceryListItem[] = [
-{ id: '1', listId: '1', itemName: 'Milk', quantity: 2, done: false, archived: false, created: Date.now(), updated: Date.now() },
-  { id: '2', listId: '1', itemName: 'Bread', quantity: 1, done: false, archived: false, created: Date.now(), updated: Date.now() },
-  { id: '3', listId: '1', itemName: 'Chicken', quantity: 2, done: false, archived: false, created: Date.now(), updated: Date.now() },
-  { id: '4', listId: '1', itemName: 'Sauce', quantity: 1, done: false, archived: false, created: Date.now(), updated: Date.now() },
+{ id: '1', listId: '1', itemName: 'Milk', quantity: '2', done: false, archived: false, created: Date.now(), updated: Date.now() },
+  { id: '2', listId: '1', itemName: 'Bread', quantity: '1', done: false, archived: false, created: Date.now(), updated: Date.now() },
+  { id: '3', listId: '1', itemName: 'Chicken', quantity: '2', done: false, archived: false, created: Date.now(), updated: Date.now() },
+  { id: '4', listId: '1', itemName: 'Sauce', quantity: '1', done: false, archived: false, created: Date.now(), updated: Date.now() },
 ];
 
 @Injectable({
@@ -45,7 +45,9 @@ export class GroceryListService {
 
   async getLists(): Promise<Signal<GroceryList[]>> {
     // TODO: fetch lists from LocalStorage
-    return signal(sampleGroceryLists);
+    const rawLists = await this.dataService.pb.collection("lists").getFullList();
+    console.log('got rawLists:', rawLists);
+    return signal(<GroceryList[]><unknown>rawLists);
   }
 
   createList(name: string, description: string) {
@@ -91,8 +93,10 @@ export class GroceryListItems {
   }
 
   async init() {
+    const filter = `DERP=="${this.groceryList.id}"`;
+    console.log("Fetching items with filter", filter);
     this.dataService.pb.collection("listItems").getFullList({
-      filter: `listId="${this.groceryList.id}"`,
+      filter: filter
     }).then((result) => {
       console.log(result);
     }).catch((error) => {
@@ -102,7 +106,7 @@ export class GroceryListItems {
     this.internalUnsub = await this.dataService.pb.collection("listItems").subscribe("*", (result) => {
       console.log(result);
     }, {
-      filter: `listId="${this.groceryList.id}"`,
+      filter: filter,
     }).catch((error: any) => {
       console.error(error);
     });
