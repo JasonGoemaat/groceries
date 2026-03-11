@@ -38,7 +38,7 @@ file.
 Actual command with values is in my [.secrets](.secrets) file.
 
 ```
-podman run -d --name groceries -p 3003:8090 \
+podman run -d --replace --name groceries -p 3003:8090 \
     -e POCKETBASE_ENCRYPTION_KEY=XXX \
     -e POCKETBASE_ADMIN_EMAIL=XXX \
     -e POCKETBASE_ADMIN_PASSWORD=XXX \
