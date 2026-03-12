@@ -8,7 +8,7 @@
                 <p class="text-sm font-thin">'{{ local().name }}'</p>
             } -->
         } @else {
-        <h1 class="text-center p-4 pt-0 w-100 text-2xl font-bold text-blue-500">Loading list '{{ id }}'</h1>
+        <h1 class="text-center p-4 pt-0 w-100 text-2xl font-bold text-blue-500">Loading list '{{ id() }}'</h1>
         }
         @if (haveRemote() && remote) {
         <!-- @if (remote().description) {
@@ -46,16 +46,16 @@
                             (data.quantity?.length) { <span>data.quantity</span> }{{ data.itemName
                             }}</td>
                         <td>
-                            <flowbite-icon name="matIndeterminateCheckBox" class="text-red-700 block size-6 stroke-2" />
+                            <flowbite-icon name="matIndeterminateCheckBox" class="text-red-700 block size-6 stroke-2" (click)="archiveItem(data)" />
                         </td>
                     </tr>
                 </ng-template>
             </table>
         </div>
         <div class="flex flex-row gap-4 items-center p-4 rounded-4xl pt-8">
-            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1">Edit List</button>
-            <button flowbiteButton pill color="failure" size="sm" class="pt-1 pb-1" (click)="onVoiceClicked()">Delete
-                List</button>
+            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1">Share</button>
+            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1" (click)="onEditClicked()">Edit</button>
+            <button flowbiteButton pill color="failure" size="sm" class="pt-1 pb-1" (click)="onDeleteClicked()">Delete</button>
         </div>
         }
         }

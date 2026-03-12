@@ -8,7 +8,7 @@ First run my container on port 8123 of your computer:
 
 Now run a command to create the admin user
 
-    docker exec -t -i groceries1 /pocketbase/scripts/pb superuser upsert "[email]" "[password]""
+    docker exec -t -i groceries1 /pocketbase/scripts/pb superuser upsert "[email]" "[password]"
 
 Alternatively you can run the image the first time with the '-t' added after
 '-d' and use the link provided changing `0.0.0.0:8090` to `localhost:8123` to

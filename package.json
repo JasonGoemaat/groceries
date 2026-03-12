@@ -40,6 +40,7 @@
     "flowbite-angular": "^21.0.0",
     "ng-primitives": "^0.90.0",
     "pocketbase": "^0.26.8",
+    "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

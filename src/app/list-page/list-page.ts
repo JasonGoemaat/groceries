@@ -42,7 +42,7 @@ export class ListPage {
   haveRemote: WritableSignal<boolean> = signal(false);
   local?: WritableSignal<LocalGroceryList>;
   remote?: WritableSignal<GroceryList>;
-  id?: WritableSignal<string>;
+  id: WritableSignal<string> = signal('UNKNOWN');
 
   // properties to handle items for associated list
   haveItems: WritableSignal<boolean> = signal(false);
@@ -66,9 +66,11 @@ export class ListPage {
     const foundId = route.snapshot.paramMap.get('id');
     if (!foundId) {
       this.errorService.replacePage("List Not Found", "There is no 'id' present in the url '/list/:id', you shouldn't be here :)")
+      return;
     }
     const knownId = `${foundId}`;
-    this.id = signal(knownId);
+    this.id.set(knownId);
+    console.log(`found id '${foundId}' in route params, set signal to '${this.id()}'`)
 
     // see if we have the list locally already
     const foundLocal = dataService.getLocal().find(x => x.id === foundId);
@@ -87,14 +89,21 @@ export class ListPage {
       console.log('set remote to:', list);
       this.haveRemote.set(true);
       console.log('set haveRemote to true');
-      this.dataService.upsertList(list);
-      console.log('upserted list');
+      const newList = this.dataService.upsertList(list);
+      console.log('upserted list', newList);
+      this.local = signal(newList);
+      this.haveLocal.set(true);
 
       const filter = `listId = "${knownId}"`;
       this.itemsCollection = new LiveCollection(dataService, "listItems", filter);
       this.activeItems = computed<GroceryListItem[]>(() => {
         // TODO: sort here?  what by?
-        return this.itemsCollection?.items().filter(x => !x.archived) || [];
+        const filtered = this.itemsCollection?.items().filter(x => !x.archived) || [];
+        filtered.sort((a, b) =>
+        {
+          return b.sortDate - a.sortDate;
+        });
+        return filtered;
       })
       this.archivedItems = computed<GroceryListItem[]>(() => {
         // TODO: sort here - most recently updated first?
@@ -124,6 +133,7 @@ export class ListPage {
       console.log('SPEECH RECOGNITION RESULTS:', event.results);
       const transcript = event.results[0][0].transcript;
       console.log('Recognized text:', transcript);
+      this.addItem(transcript);
     };
   }
 
@@ -206,5 +216,16 @@ export class ListPage {
       }
     }
     this.addItem(this.addingItemName());
+  }
+
+  public onEditClicked() {
+    // TODO: open edit dialog or navigate to edit page
+  }
+
+  public onDeleteClicked() {
+    // TODO: confirm delete (confirm() or dialog?), delete items then list
+    // Maybe leave on server but just delete from local lists, possibly
+    // store recent list of local ones and have link on home page to 
+    // add them back?
   }
 }

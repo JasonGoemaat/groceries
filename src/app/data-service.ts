@@ -64,14 +64,17 @@ export class DataService {
    * given alias.   Lists with no alias will be displayed with the name and
    * show an option to set an alias.
    */
-  upsertList(list: GroceryList, alias = '') {
+  upsertList(list: GroceryList, alias = ''): LocalGroceryList {
     const lists = this.getLocal();
-    if (lists.find(x => x.id === list.id)) {
-      return;
+    const found = lists.find(x => x.id === list.id);
+    if (found) {
+      return found;
     }
     alias = alias || list.name;
-    lists.unshift({ id: `${list.id}`, name: list.name, alias })
+    const localList = { id: `${list.id}`, name: list.name, alias };
+    lists.unshift(localList)
     localStorage.setItem("groceries:lists", JSON.stringify(lists));
+    return localList;
   }
 
   /**
