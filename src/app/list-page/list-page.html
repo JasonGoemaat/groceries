@@ -1,0 +1,55 @@
+<app-header-component></app-header-component>
+<div class="flex flex-col items-center">
+    <div class="flex flex-col items-center my-bg-light mt-8 p-4 rounded-4xl">
+        @if (haveLocal() && local) {
+        <h1 class="text-center p-4 pt-0 pb-0 w-100 text-2xl font-bold text-gray-700">{{ local().alias || local().name }}
+        </h1>
+        <!-- @if (local().alias && local().alias != local().name) {
+                <p class="text-sm font-thin">'{{ local().name }}'</p>
+            } -->
+        } @else {
+        <h1 class="text-center p-4 pt-0 w-100 text-2xl font-bold text-blue-500">Loading list '{{ id }}'</h1>
+        }
+        @if (haveRemote() && remote) {
+        <!-- @if (remote().description) {
+                <p class="text-sm font-thin text-black-500">{{ remote().description }}</p>
+            } -->
+        @if (activeItems) {
+        <div class="flex flex-row gap-4 items-center p-4 rounded-4xl">
+            <button flowbiteButton pill outline color="default" size="xs" class="pt-1 pb-1"
+                (click)="onAddClicked()">Add</button>
+            <button flowbiteButton pill outline color="default" size="xs" class="pt-1 pb-1">Recent</button>
+            <button flowbiteButton pill outline color="default" size="xs" class="pt-1 pb-1" (click)="onVoiceClicked()">Voice</button>
+        </div>
+        <div class="flex flex-row gap-4 items-center" [style.visibility]="isAdding() ? 'visible' : 'hidden'">
+            <input flowbiteFormControl type="text" [(ngModel)]="addingName" placeholder="name"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-blue-500 rounded py-1 px-2 mb-3 mt-3 leading-tight focus:outline-none focus:bg-white" />
+            <button flowbiteButton pill color="info" size="xs">add</button>
+        </div>
+        <p>activeItems().length: {{ activeItems().length }}</p>
+        @if (!activeItems().length) {
+        <p class="mt-2">No items yet</p>
+        } @else {
+        <div class="w-fit">
+            <table flowbiteTable [tableBody]="tableBody" [data]="activeItems()" class="fit-content">
+                <ng-template #tableBody let-data>
+                    <tr flowbiteTableBody>
+                        <td scope="row" class="px-2 py-4">
+                            <input flowbiteFormControl name="done" type="checkbox" [(ngModel)]="data.done"
+                                (change)="toggleDone(data, $event)" />
+                        </td>
+                        <td class="px-6 py-4">@if (data.quantity?.length) { <span>data.quantity</span> }{{ data.itemName
+                            }}</td>
+                        <td class="px-2 py-4 underline" (click)="archiveItem(data)">archive</td>
+                    </tr>
+                </ng-template>
+            </table>
+        </div>
+        }
+        }
+        } @else {
+        <p class="mt-2">loading...</p>
+        }
+
+    </div>
+</div>

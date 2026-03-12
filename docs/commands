@@ -1,0 +1,20 @@
+# Secrets go here
+# Should be ignored by .gitignore and .dockerignore
+
+# run JUST pocketbase and map to my 'groceries' volume created with
+#  `podman volume create groceries`
+podman run -d --replace --name groceries -p 3003:8090 \
+    -e POCKETBASE_ENCRYPTION_KEY=XXX \
+    -e POCKETBASE_ADMIN_EMAIL=XXX \
+    -e POCKETBASE_ADMIN_PASSWORD=XXX \
+    -v groceries:/pocketbase:z \
+    adrianmusante/pocketbase:latest
+
+# sample exec to run command inside docker
+podman exec -t \
+    -e POCKETBASE_ENCRYPTION_KEY=XXX \
+    -e POCKETBASE_ADMIN_EMAIL=XXX \
+    -e POCKETBASE_ADMIN_PASSWORD=XXX \
+    -w=/pocketbase \
+    groceries \
+    /opt/pocketbase/scripts/entrypoint.sh migrate collections

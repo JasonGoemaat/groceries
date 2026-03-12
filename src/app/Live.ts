@@ -4,7 +4,7 @@ to changes and update the UI accordingly.
 */
 
 import { signal, WritableSignal } from "@angular/core";
-import { DataService } from "../../data-service";
+import { DataService } from "./data-service";
 import { RecordModel, RecordSubscription } from "pocketbase";
 
 export interface HasId {
@@ -13,7 +13,7 @@ export interface HasId {
 
 export class LiveCollection<T extends HasId> {
     public items: WritableSignal<T[]> = signal([]);
-    public loaded: boolean = false;
+    public loaded: WritableSignal<boolean> = signal(false);
 
     constructor(
         public dataService: DataService,
@@ -26,7 +26,7 @@ export class LiveCollection<T extends HasId> {
         }).then((result) => {
             // this.items.set(result.items);
             this.items.set(<T[]>(<unknown>result));
-            this.loaded = true;
+            this.loaded.set(true);
         })
 
         const updateItem = (data: RecordSubscription<RecordModel>) => {

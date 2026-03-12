@@ -1,0 +1,27 @@
+<app-header-component></app-header-component>
+<div class="flex flex-col items-center">
+    <div class="flex flex-col items-center my-bg-light mt-8 p-4 rounded-4xl">
+        <h1 class="text-center p-4  w-100 text-2xl font-bold text-blue-500">Create Grocery
+            List
+        </h1>
+        <form class="mx-auto max-w-sm" (ngSubmit)="onSubmit()">
+            <div flowbiteFormField>
+                <label flowbiteLabel for="name">
+                    Name for list
+                </label>
+                <input flowbiteFormControl [(ngModel)]="name" id="name" name="name" placeholder="Party Supplies" />
+                <p flowbiteHelper>The name will be the default when shared.</p>
+            </div>
+            <div flowbiteFormField>
+                <label flowbiteLabel for="alias">
+                    Alias (optional)
+                </label>
+                <input flowbiteFormControl [(ngModel)]="alias" id="alias" name="alias" placeholder="Alice's Birthday" />
+                <p flowbiteHelper>Will show as this in your current browser only.</p>
+            </div>
+            <button flowbiteButton color="info" type="submit" class="w-full" >
+                Submit
+            </button>
+        </form>
+    </div>
+</div>

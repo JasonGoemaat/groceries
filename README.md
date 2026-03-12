@@ -1,59 +1,80 @@
 # Groceries
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+## Pre-built Image Quickstart:
 
-## Development server
+First run my container on port 8123 of your computer:
 
-To start a local development server, run:
+    docker run -d -p8123:8090 --name groceries1 jasongoemaat/groceries:latest
 
-```bash
-ng serve
-```
+Now run a command to create the admin user
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+    docker exec -t -i groceries1 /pocketbase/scripts/pb superuser upsert "[email]" "[password]""
 
-## Code scaffolding
+Alternatively you can run the image the first time with the '-t' added after
+'-d' and use the link provided changing `0.0.0.0:8090` to `localhost:8123` to
+create the first admin user in your browser.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Build Your Own Docker Image:
 
-```bash
-ng generate component component-name
-```
+1. Run `docker build . -t my-groceries`
+    * the `-t my-groceries` option gives it a tag of 'my-groceries'
+2. Run `docker run -t -p8123:8090 --name groceries1 my-groceries`
+    * the `--name groceries1` option names the new container, otherwise docker
+        will give it a funny name and you will have to use that or the hash
+        to manage it.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+This will expose the app on your computer on port 8123.  The '-t' will give it
+a 'tty' so it displays output.   Copy the link it displays and change the
+host and port from `0.0.0.0:8090` to `localhost:8123`.   This will open a page
+for you to create an admin login with the user and password you provide and
+show you the dashboard where you can manage the server.
 
-```bash
-ng generate --help
-```
+In the future you can start and stop the container:
 
-## Building
+    docker stop groceries1
+    docker start groceries1
 
-To build the project run:
+## Environments
 
-```bash
-ng build
-```
+Building in production uses the PocketBase url '/' (specified in
+`src/environments/environment.production.ts`) as the app is meant to be
+run by building the docker image and service the app through the PocketBase
+'public' directory.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Running in development uses the PocketBase url 'http://localhost:8090', the
+default when you run pocketbase on your local machine.  When running this way,
+you should copy the contents of the 'migrations' directory to where pocketbase
+can access them to create the database structure.
 
-## Running unit tests
+I added a 'local' environment and added 
+`src/environments/environment.local.ts` to `.gitignore` so you can create that
+file with the contents from `environment.development.ts` and change the url
+to choose a different dev server without messing with source control.
+    
+    npm start -- --configuration=local
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+I also added a script for it directly:
 
-```bash
-ng test
-```
+    npm run local
 
-## Running end-to-end tests
+## Migrations
 
-For end-to-end (e2e) testing, run:
+You should copy the files from the pocketbase 'migrations' folder where
+the app runs to the 'pocketase/migrations' folder here so that future installs
+will have any changes you make with the admin UI.
 
-```bash
-ng e2e
-```
+For me, I run on my box called 'fedora' as my user 'jason'.   The container
+is running on podman with a mapped volume for the data.   This is the command
+I use to copy the contents of the migration file from my server to the
+local directory:
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+    PS C:\git\goemaat.com\groceries\pocketbase\migrations>
+    scp jason@fedora:.local/share/containers/storage/volumes/groceries/_data/migrations/* .
 
-## Additional Resources
+## Other Pages:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+* [GithubAction](docs/GithubAction.md) - Explains the github action and how
+    to setup variables to deploy to your own server using SSH and the
+    github container registry (ghcr.io)
+
+

@@ -1,15 +1,14 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 import { GroceryList, GroceryListItem, GroceryListService } from '../../grocery-list-service';
 import { Button } from 'flowbite-angular/button';
-import { LiveCollection } from './LiveCollection';
+import { LiveCollection } from '../../Live';
 import { DataService } from '../../data-service';
 import { TGLSGroceryList } from './tglsgrocery-list/tglsgrocery-list';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-test-grocery-list-service',
-  imports: [Button, TGLSGroceryList, JsonPipe, RouterLink],
+  imports: [Button, TGLSGroceryList, RouterLink],
   templateUrl: './test-grocery-list-service.html',
   styleUrl: './test-grocery-list-service.css',
   providers: [GroceryListService, DataService],

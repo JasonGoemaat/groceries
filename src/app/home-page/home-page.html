@@ -1,1 +1,18 @@
-<p>home-page works!</p>
+<app-header-component></app-header-component>
+
+<div class="flex flex-col gap-4 items-center w-full mt-4">
+    @if (lists().length === 0) {
+        <div class="my-bg-dark text-white flex flex-col gap-4 items-center p-4 rounded-4xl">
+            <p class="text-xl">No lists found</p>
+            <button flowbiteButton [routerLink]="['/create']" pill color="info" size="xl">Create your first list</button>
+        </div>
+    } @else {
+    <div class="flex gap-4 items-center content-center my-bg-dark p-16" style="padding: 16px; border-radius: 24px;">
+        @for (list of lists(); track list.id) {
+        <!-- <button flowbiteButton (click)="selectList(list)" size="xs" pill>{{ list.name }}</button> -->
+         <button flowbiteButton [routerLink]="[`/lists/${list.id}`]">{{ list.alias }}</button>
+        }
+        <button flowbiteButton (click)="addList()" [routerLink]="['/create']" color="info" size="xl" pill>Create</button>
+    </div>
+    }
+</div>
