@@ -27,6 +27,10 @@ export class ErrorService {
     })
   }
 
+  public alert(message: string) {
+    alert(message);
+  }
+
   public clear() {
     this.lastErrorTitle = '';
     this.lastErrorMessage = '';

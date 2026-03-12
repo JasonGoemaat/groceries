@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import PocketBase from "pocketbase";
 import { environment } from '../environments/environment';
-import { GroceryList } from './grocery-list-service';
+import { GroceryList, GroceryListItem } from './grocery-list-service';
 
 export interface LocalGroceryList {
   id: string;
@@ -72,5 +72,23 @@ export class DataService {
     alias = alias || list.name;
     lists.unshift({ id: `${list.id}`, name: list.name, alias })
     localStorage.setItem("groceries:lists", JSON.stringify(lists));
+  }
+
+  /**
+   * Add an item as active (not archived).  Returns item, but list page will
+   * ignore as it uses LiveCollection to receive updates from the server.
+   */
+  async addItem(listId: string, itemName: string): Promise<GroceryListItem> {
+    console.log(`updateItem('${listId}', '${name}')`);
+    const result = await this.pb.collection('listItems').create({ listId, itemName, sortDate: Date.now() });
+    console.log('Added item:', result);
+    return <GroceryListItem>(<any>result);
+  }
+
+  async updateItem(id: string, changes: any): Promise<GroceryListItem> {
+    console.log(`updateItem('${id}')`, changes);
+    const result = await this.pb.collection('listItems').update(id, changes);
+    console.log('updated item:', result);
+    return <GroceryListItem>(<any>result);
   }
 }

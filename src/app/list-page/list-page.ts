@@ -1,4 +1,4 @@
-import { Component, WritableSignal, Signal, signal, computed } from '@angular/core';
+import { Component, WritableSignal, Signal, signal, computed, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService, LocalGroceryList } from '../data-service';
 import { GroceryList, GroceryListItem } from '../grocery-list-service';
@@ -9,13 +9,33 @@ import { Button } from 'flowbite-angular/button';
 import { Table, TableBody } from 'flowbite-angular/table';
 import { FormsModule } from '@angular/forms';
 
+// INFO: Icons
+// see: https://ng-icons.github.io/ng-icons/#/browse-icons?iconset=tablerBrandGoogle
+// Clicking on set shows 'Package' you need to add above the search box which
+// is in the import.   If not added, you need to add the group using npm.
+// Example, I click 'Material Icons' and want to add matCheckBoxRound and matCheckBoxOutlineBlankRound.
+// I need to install '@ng-icons/material-icons' for that group of icons
+//    npm i @ng-icons/material-icons
+// I need to add an import to my typescript:
+//    import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round'
+// i.e. 'Material Icons' I run `npm i @ng-icons/material-icons/outline`
+import { Icon } from 'flowbite-angular/icon';
+import { close } from 'flowbite-angular/icon/outline/general';
+import { provideIcons } from '@ng-icons/core';
+import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round'
+import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline'
+
 @Component({
   selector: 'app-list-page',
-  imports: [HeaderComponent, Button, Table, TableBody, FormsModule],
+  imports: [HeaderComponent, Button, Table, TableBody, FormsModule, Icon],
   templateUrl: './list-page.html',
   styleUrl: './list-page.css',
+  providers: [provideIcons({ close, matCheckBoxRound, matCheckBoxOutlineBlankRound, matIndeterminateCheckBox })]
 })
 export class ListPage {
+  // to focus element
+  @ViewChild('itemName') inputElement!: ElementRef;
+
   // properties to signal id and list and when we have locally and remotely
   isLoading: WritableSignal<boolean> = signal(true);
   haveLocal: WritableSignal<boolean> = signal(false);
@@ -31,8 +51,11 @@ export class ListPage {
   archivedItems?: Signal<GroceryListItem[]>;
 
   // adding new item
-  isAdding: WritableSignal<boolean> = signal(false);
-  addingName: string = '';
+  isAddingItem: WritableSignal<boolean> = signal(true); // in case we want to toggle
+  addingItemName = signal('');
+
+  // busy when performing operatoins, disables controls
+  isBusy: WritableSignal<boolean> = signal(false);
   
   public constructor(
     public route: ActivatedRoute,
@@ -82,19 +105,6 @@ export class ListPage {
     })
   }
 
-  public onAddClicked() {
-    console.log('onAddClicked()');
-    if (this.isAdding()) {
-      this.addingName = '';
-      this.isAdding.set(false);
-      console.log('onAddClicked() - isAdding set to FALSE');
-      return;
-    }
-    this.addingName = '';
-    this.isAdding.set(true);
-    console.log('onAddClicked() - isAdding set to TRUE');
-  }
-
   public onVoiceClicked() {
     // 1. Initialize the API (with vendor prefix fallback)
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -117,15 +127,84 @@ export class ListPage {
     };
   }
 
-  public toggleDone(item: GroceryListItem, event: Event) {
-    console.log('toggleDone()', item);
+  public async toggleDone(item: GroceryListItem) {
+    try {
+      this.isBusy.set(true);
+      console.log(`toggling done for item '${item.id}', currently ${item.done}`)
+      const result = await this.dataService.updateItem(item.id, { done: !item.done });
+      console.log('result:', result);
+      this.isBusy.set(false);
+    } catch (error) {
+      this.isBusy.set(false);
+      this.errorService.replacePage("An Error Occurred", "archiving item failed", `${error}`);
+    }
   }
 
-  public archiveItem(item: GroceryListItem) {
-    console.log('archiveItem()', item);
+  public isAddValid() {
+    return this.addingItemName().length >= 2 && this.addingItemName().length <= 80;
   }
 
-  public addItem(name: string) {
-    
+  /**
+   * Helper used by adding with the text box or voice button
+   */
+  public async addItem(itemName: string) : Promise<GroceryListItem | undefined> {
+    if (itemName.length < 2 || itemName.length > 80) {
+      this.errorService.alert("Name must be between 2 and 80 characters");
+    }
+    this.isBusy.set(true);
+    if (this.remote) {
+      try {
+        const result = await this.dataService.addItem(this.remote().id || '', itemName)
+        console.log(`addItem('${itemName}'):`, result)
+        this.focusAddingItemName();
+        this.isBusy.set(false);
+        return <GroceryListItem>(<any>result);
+      } catch (error) {
+        this.isBusy.set(false);
+        this.errorService.replacePage("An Error Occurred", "adding item to database failed", `${error}`);
+        return undefined;
+      }
+    } else {
+      this.isBusy.set(false);
+      this.errorService.replacePage("An Error Occurred", "'remote' object not set, that's odd!");
+      return undefined;
+    }
+  }
+
+  public async archiveItem(item: GroceryListItem) : Promise<GroceryListItem | undefined> {
+    try {
+      this.isBusy.set(true);
+      const result = await this.dataService.updateItem(item.id, { archived: true, sortDate: Date.now() });
+      this.isBusy.set(false);
+      return <GroceryListItem>(<any>result);
+    } catch (error) {
+      this.isBusy.set(false);
+      this.errorService.replacePage("An Error Occurred", "archiving item failed", `${error}`);
+      return undefined;
+    }
+  }
+
+  public focusAddingItemName() {
+    this.addingItemName.set('');
+    this.inputElement.nativeElement.focus();
+  }
+
+  /**
+   * When 'add' is clicked, use text from input control and add a new item.
+   * If item is in archived list already, just unarchive it.
+   */
+  public async onAddClicked() {
+    console.log(`onAddClicked() - start, name = '${this.addingItemName()}'`)
+    this.isBusy.set(true);
+    if (this.archivedItems) {
+      const found = this.archivedItems().find(x => x.itemName.toLocaleLowerCase() == this.addingItemName().toLocaleLowerCase())
+      if (found) {
+        console.log(`onAddClicked() - found in archivedItems, updating:`, found)
+        this.dataService.updateItem(found.id, { archived: false, sortDate: Date.now() })
+        this.focusAddingItemName();
+        return;
+      }
+    }
+    this.addItem(this.addingItemName());
   }
 }
