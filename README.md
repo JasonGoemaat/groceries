@@ -1,59 +1,51 @@
 # Groceries
 
-## Pre-built Image Quickstart:
 
-First run my container on port 8123 of your computer:
+## Quickstart
 
-    docker run -d -p8123:8090 --name groceries1 jasongoemaat/groceries:latest
+Start my image pre-built image locally
 
-Now run a command to create the admin user
+    docker run -d -t -p 127.0.0.1:8123:8090 --name groceries ghcr.io/jasongoemaat/groceries:latest
 
-    docker exec -t -i groceries1 /pocketbase/scripts/pb superuser upsert "[email]" "[password]"
+Look at log and go to the url given, changing '0.0.0.0:8090' to
+'127.0.0.1:8123'.  This will let you create an admin user.   Then you
+can use the admin console at: http://127.0.0.1:8123/_/
 
-Alternatively you can run the image the first time with the '-t' added after
-'-d' and use the link provided changing `0.0.0.0:8090` to `localhost:8123` to
-create the first admin user in your browser.
+    docker logs groceries
 
+You can just use the app with the latest code by going to http://127.0.0.1:8123
+
+Running in development mode is setup to use this url in
+`/src/environments/environment.development.ts`, so just you can just
+install dependencies and start:
+
+    npm i
+    npm start
+
+> TODO: add '-v' option to example to mount local 'migrations' folder so you
+can update collections using the admin UI and it will update the code.
+    
 ## Build Your Own Docker Image:
 
 1. Run `docker build . -t my-groceries`
-    * the `-t my-groceries` option gives it a tag of 'my-groceries'
-2. Run `docker run -t -p8123:8090 --name groceries1 my-groceries`
-    * the `--name groceries1` option names the new container, otherwise docker
-        will give it a funny name and you will have to use that or the hash
-        to manage it.
-
-This will expose the app on your computer on port 8123.  The '-t' will give it
-a 'tty' so it displays output.   Copy the link it displays and change the
-host and port from `0.0.0.0:8090` to `localhost:8123`.   This will open a page
-for you to create an admin login with the user and password you provide and
-show you the dashboard where you can manage the server.
+2. Run `docker run -p 127.0.0.1:8123:8090 --name groceries1 my-groceries`
+3. Run `docker logs groceries1`
+4. Visit the displayed url, changing `0.0.0.0:8090` to `127.0.0.1:8123` to
+    setup an admin user.
 
 In the future you can start and stop the container:
 
     docker stop groceries1
     docker start groceries1
 
-## Environments
+## Custom Server
 
-Building in production uses the PocketBase url '/' (specified in
-`src/environments/environment.production.ts`) as the app is meant to be
-run by building the docker image and service the app through the PocketBase
-'public' directory.
+For developing locally against a different server I created a 'local'
+angular environment.
 
-Running in development uses the PocketBase url 'http://localhost:8090', the
-default when you run pocketbase on your local machine.  When running this way,
-you should copy the contents of the 'migrations' directory to where pocketbase
-can access them to create the database structure.
-
-I added a 'local' environment and added 
-`src/environments/environment.local.ts` to `.gitignore` so you can create that
-file with the contents from `environment.development.ts` and change the url
-to choose a different dev server without messing with source control.
-    
-    npm start -- --configuration=local
-
-I also added a script for it directly:
+The file `src/environments/environment.local.ts` is ignored by source control,
+so create that file and copy the contents of the development version and
+change the POCKETBASE_URL.   Then run with this command to use that:
 
     npm run local
 
@@ -76,5 +68,3 @@ local directory:
 * [GithubAction](docs/GithubAction.md) - Explains the github action and how
     to setup variables to deploy to your own server using SSH and the
     github container registry (ghcr.io)
-
-

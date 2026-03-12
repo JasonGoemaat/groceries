@@ -43,7 +43,7 @@ jobs:
           ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy to server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "podman pull ${{ secrets.IMAGE_NAME }} && podman run -d --replace --name groceries -p 3004:8090 -v groceries:/pocketbase:z ${{ secrets.IMAGE_NAME }}"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "~/.deploy/deploy_groceries.sh"
       - name: cleanup
         run: |
           rm -rf ~/.ssh
