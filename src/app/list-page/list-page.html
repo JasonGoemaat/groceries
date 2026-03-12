@@ -1,0 +1,67 @@
+<app-header-component></app-header-component>
+<div class="flex flex-col items-center px-4">
+    <div class="flex flex-col items-center my-bg-light mt-8 p-4 rounded-4xl">
+        @if (haveLocal() && local) {
+        <h1 class="text-center p-4 pt-0 pb-0 text-2xl font-bold text-gray-700">{{ local().alias || local().name }}
+        </h1>
+        <!-- @if (local().alias && local().alias != local().name) {
+                <p class="text-sm font-thin">'{{ local().name }}'</p>
+            } -->
+        } @else {
+        <h1 class="text-center p-4 pt-0 w-100 text-2xl font-bold text-blue-500">Loading list '{{ id }}'</h1>
+        }
+        @if (haveRemote() && remote) {
+        <!-- @if (remote().description) {
+                <p class="text-sm font-thin text-black-500">{{ remote().description }}</p>
+            } -->
+        @if (activeItems) {
+        <div class="flex flex-row gap-4 items-center p-4 rounded-4xl">
+            <button flowbiteButton pill color="info" size="sm" class="pt-1 pb-1">Recent</button>
+            <button flowbiteButton pill color="info" size="sm" class="pt-1 pb-1"
+                (click)="onVoiceClicked()">Voice</button>
+        </div>
+        <div class="flex flex-row gap-4 items-center" [style.visibility]="isAddingItem() ? 'visible' : 'hidden'"
+            [style.height]="isAddingItem() ? 'auto' : '0px'">
+            <input #itemName flowbiteFormControl type="text" [(ngModel)]="addingItemName" placeholder="item name"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-blue-500 rounded py-1 px-2 mb-3 mt-3 leading-tight focus:outline-none focus:bg-white"
+                (keyup.enter)="onAddClicked()" />
+            <button flowbiteButton pill color="info" size="xs" [disabled]="isBusy() || !isAddValid()"
+                (click)="onAddClicked()">add</button>
+        </div>
+        @if (!activeItems().length) {
+        <p class="mt-2">No items yet</p>
+        } @else {
+        <div class="w-fit mt-4">
+            <table flowbiteTable [tableBody]="tableBody" [data]="activeItems()" class="fit-content text-gray-900">
+                <ng-template #tableBody let-data>
+                    <tr flowbiteTableBody>
+                        <td scope="row" class="px-2 py-1 cursor-pointer" (click)="toggleDone(data)">
+                            @if (data.done) {
+                            <flowbite-icon name="matCheckBoxRound" class="text-green-700 block size-6 stroke-2" />
+                            } @else {
+                            <flowbite-icon name="matCheckBoxOutlineBlankRound" class="block size-6 stroke-2" />
+                            }
+                        </td>
+                        <td class="px-6 py-1 text-lg cursor-pointer min-w-60" (click)="toggleDone(data)">@if
+                            (data.quantity?.length) { <span>data.quantity</span> }{{ data.itemName
+                            }}</td>
+                        <td>
+                            <flowbite-icon name="matIndeterminateCheckBox" class="text-red-700 block size-6 stroke-2" />
+                        </td>
+                    </tr>
+                </ng-template>
+            </table>
+        </div>
+        <div class="flex flex-row gap-4 items-center p-4 rounded-4xl pt-8">
+            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1">Edit List</button>
+            <button flowbiteButton pill color="failure" size="sm" class="pt-1 pb-1" (click)="onVoiceClicked()">Delete
+                List</button>
+        </div>
+        }
+        }
+        } @else {
+        <p class="mt-2">loading...</p>
+        }
+
+    </div>
+</div>

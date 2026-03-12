@@ -1,0 +1,36 @@
+# Variables required for github actions.  These are examples only, I recommend
+# copying this somewhere safe (or to `github_variables.secret` which should be
+# ignored by git and docker) and updating the values as you find them, then
+# using that as a reference to set the variables for your github action.
+
+# <-- OTHER SECRETS/VARIABLES -->
+# 
+#   1. Navigate to the last tab 'Settings' on your repo
+#   2. go to Security->Secrets and variables->Actions
+#   3. Create 'New repository secret' for these
+
+# SSH_HOST
+#
+#   public host name or ip for your server
+
+# SSH_PORT
+#
+#   public ssh port of your server that github action can access
+
+# SSH_USER
+#
+#   user github can use to login to your server using SSH
+
+# SSH_PRIVATE_KEY
+#
+#   private key github action can use to connect to your server
+# 
+#   On your fedora server under your home directory, run this to create
+#   gh_groceries and gh_groceries.pub:
+#     ssh-keygen -t rsa -b 4096 -f gh_groceries
+#
+#   Add the public key to authorized keys for your user:
+#     cat gh_groceries.pub >> ~/.ssh/authorized_keys
+#
+#   Output the private key and copy to clipboard:
+#     cat gh_groceries

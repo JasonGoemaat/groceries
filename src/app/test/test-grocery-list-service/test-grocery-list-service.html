@@ -1,11 +1,10 @@
 <div class="flex flex-col gap-4 items-center w-full">
-    <h1 class="text-6xl text-white text-center w-full my-bg-dark p-4 rounded-4xl">
+    <h1 class="text-6xl text-white text-center w-full my-bg-dark p-4 rounded-4xl font-bold">
         <a [routerLink]="['/']">Groceries</a></h1>
     @if (lists().length === 0) {
     <p>No lists found</p>
     } @else {
-
-    <div class="flex gap-4 items-center content-center my-bg-dark p-16" style="padding: 16px; border-radius: 24px;">
+       <div class="flex gap-4 items-center content-center my-bg-dark p-16" style="padding: 16px; border-radius: 24px;">
         @for (list of lists(); track list.id) {
             <button flowbiteButton (click)="selectList(list)" size="xs" pill>{{ list.name }}</button>
         }

@@ -17,6 +17,7 @@ export interface GroceryListItem {
   quantity: string;
   done: boolean;
   archived: boolean;
+  sortDate: number;
   created: number;
   updated: number;
 }
@@ -27,10 +28,10 @@ let sampleGroceryLists: GroceryList[] = [
 ];
 
 let sampleGroceryListItems: GroceryListItem[] = [
-{ id: '1', listId: '1', itemName: 'Milk', quantity: '2', done: false, archived: false, created: Date.now(), updated: Date.now() },
-  { id: '2', listId: '1', itemName: 'Bread', quantity: '1', done: false, archived: false, created: Date.now(), updated: Date.now() },
-  { id: '3', listId: '1', itemName: 'Chicken', quantity: '2', done: false, archived: false, created: Date.now(), updated: Date.now() },
-  { id: '4', listId: '1', itemName: 'Sauce', quantity: '1', done: false, archived: false, created: Date.now(), updated: Date.now() },
+{ id: '1', listId: '1', itemName: 'Milk', quantity: '2', done: false, archived: false, sortDate: Date.now(), created: Date.now(), updated: Date.now() },
+  { id: '2', listId: '1', itemName: 'Bread', quantity: '1', done: false, archived: false, sortDate: Date.now(), created: Date.now(), updated: Date.now() },
+  { id: '3', listId: '1', itemName: 'Chicken', quantity: '2', done: false, archived: false, sortDate: Date.now(), created: Date.now(), updated: Date.now() },
+  { id: '4', listId: '1', itemName: 'Sauce', quantity: '1', done: false, archived: false, sortDate: Date.now(), created: Date.now(), updated: Date.now() },
 ];
 
 @Injectable({

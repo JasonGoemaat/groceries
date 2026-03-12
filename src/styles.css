@@ -19,5 +19,9 @@
 }
 
 .my-bg-dark {
-  background-color: lab(3.92% 2.06 5.9 / 0.68);
+  background-color: rgba(22, 12, 0, 0.836);
+}
+
+.my-bg-light {
+  background-color: lab(97.59% 0.99 5.74 / 0.7);
 }
