@@ -35,6 +35,7 @@
     "@angular/ssr": "^21.2.1",
     "@ng-icons/core": "^31.4.0",
     "@ng-icons/material-icons": "^33.1.0",
+    "angularx-qrcode": "^21.0.4",
     "express": "^5.1.0",
     "flowbite": "^4.0.1",
     "flowbite-angular": "^21.0.0",

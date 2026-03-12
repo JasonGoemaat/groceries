@@ -17,3 +17,6 @@ See: [docs/github_variables](docs/github_variables)
 * `SSH_PORT` - port to connect to host with SSH
 * `SSH_USER` - user for connecting to ssh
 * `SSH_PRIVATE_KEY` - private key (i.e. contents of `.ssh/id_rsa`)
+* `IMAGE_NAME` - for me it is `ghcr.io/jasongoemaat/groceries:latest`
+
+The action runs the script `~/.deploy/deploy_groceries` on the server.

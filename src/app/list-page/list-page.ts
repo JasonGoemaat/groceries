@@ -7,6 +7,13 @@ import { LiveCollection } from '../Live';
 import { HeaderComponent } from '../header-component/header-component';
 import { Button } from 'flowbite-angular/button';
 import { Table, TableBody } from 'flowbite-angular/table';
+import {
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from 'flowbite-angular/modal';
 import { FormsModule } from '@angular/forms';
 
 // INFO: Icons
@@ -24,10 +31,28 @@ import { close } from 'flowbite-angular/icon/outline/general';
 import { provideIcons } from '@ng-icons/core';
 import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round'
 import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline'
+import { NgpDialogTrigger } from 'ng-primitives/dialog';
+import { QRCodeComponent } from 'angularx-qrcode';
+import { Clipboard } from 'flowbite-angular/clipboard';
 
 @Component({
   selector: 'app-list-page',
-  imports: [HeaderComponent, Button, Table, TableBody, FormsModule, Icon],
+  imports: [
+    HeaderComponent,
+    Button,
+    Table,
+    TableBody,
+    FormsModule,
+    Icon,
+    Modal,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    NgpDialogTrigger,
+    QRCodeComponent,
+    Clipboard,
+  ],
   templateUrl: './list-page.html',
   styleUrl: './list-page.css',
   providers: [provideIcons({ close, matCheckBoxRound, matCheckBoxOutlineBlankRound, matIndeterminateCheckBox })]
@@ -42,7 +67,7 @@ export class ListPage {
   haveRemote: WritableSignal<boolean> = signal(false);
   local?: WritableSignal<LocalGroceryList>;
   remote?: WritableSignal<GroceryList>;
-  id?: WritableSignal<string>;
+  id: WritableSignal<string> = signal('UNKNOWN');
 
   // properties to handle items for associated list
   haveItems: WritableSignal<boolean> = signal(false);
@@ -56,6 +81,9 @@ export class ListPage {
 
   // busy when performing operatoins, disables controls
   isBusy: WritableSignal<boolean> = signal(false);
+
+  // qrcode
+  listUrl: WritableSignal<string> = signal('');
   
   public constructor(
     public route: ActivatedRoute,
@@ -63,12 +91,18 @@ export class ListPage {
     public errorService: ErrorService,
   ) {
     // get 'id' parameter, error if none found
+    console.log('route url:', route.url);
+    console.log('location.href', location.href);
+    this.listUrl.set(location.href);
+
     const foundId = route.snapshot.paramMap.get('id');
     if (!foundId) {
       this.errorService.replacePage("List Not Found", "There is no 'id' present in the url '/list/:id', you shouldn't be here :)")
+      return;
     }
     const knownId = `${foundId}`;
-    this.id = signal(knownId);
+    this.id.set(knownId);
+    console.log(`found id '${foundId}' in route params, set signal to '${this.id()}'`)
 
     // see if we have the list locally already
     const foundLocal = dataService.getLocal().find(x => x.id === foundId);
@@ -87,14 +121,21 @@ export class ListPage {
       console.log('set remote to:', list);
       this.haveRemote.set(true);
       console.log('set haveRemote to true');
-      this.dataService.upsertList(list);
-      console.log('upserted list');
+      const newList = this.dataService.upsertList(list);
+      console.log('upserted list', newList);
+      this.local = signal(newList);
+      this.haveLocal.set(true);
 
       const filter = `listId = "${knownId}"`;
       this.itemsCollection = new LiveCollection(dataService, "listItems", filter);
       this.activeItems = computed<GroceryListItem[]>(() => {
         // TODO: sort here?  what by?
-        return this.itemsCollection?.items().filter(x => !x.archived) || [];
+        const filtered = this.itemsCollection?.items().filter(x => !x.archived) || [];
+        filtered.sort((a, b) =>
+        {
+          return b.sortDate - a.sortDate;
+        });
+        return filtered;
       })
       this.archivedItems = computed<GroceryListItem[]>(() => {
         // TODO: sort here - most recently updated first?
@@ -124,6 +165,7 @@ export class ListPage {
       console.log('SPEECH RECOGNITION RESULTS:', event.results);
       const transcript = event.results[0][0].transcript;
       console.log('Recognized text:', transcript);
+      this.addItem(transcript);
     };
   }
 
@@ -206,5 +248,16 @@ export class ListPage {
       }
     }
     this.addItem(this.addingItemName());
+  }
+
+  public onEditClicked() {
+    // TODO: open edit dialog or navigate to edit page
+  }
+
+  public onDeleteClicked() {
+    // TODO: confirm delete (confirm() or dialog?), delete items then list
+    // Maybe leave on server but just delete from local lists, possibly
+    // store recent list of local ones and have link on home page to 
+    // add them back?
   }
 }
