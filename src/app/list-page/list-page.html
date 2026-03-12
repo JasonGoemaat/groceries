@@ -46,16 +46,20 @@
                             (data.quantity?.length) { <span>data.quantity</span> }{{ data.itemName
                             }}</td>
                         <td>
-                            <flowbite-icon name="matIndeterminateCheckBox" class="text-red-700 block size-6 stroke-2" (click)="archiveItem(data)" />
+                            <flowbite-icon name="matIndeterminateCheckBox" class="text-red-700 block size-6 stroke-2"
+                                (click)="archiveItem(data)" />
                         </td>
                     </tr>
                 </ng-template>
             </table>
         </div>
         <div class="flex flex-row gap-4 items-center p-4 rounded-4xl pt-8">
-            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1">Share</button>
-            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1" (click)="onEditClicked()">Edit</button>
-            <button flowbiteButton pill color="failure" size="sm" class="pt-1 pb-1" (click)="onDeleteClicked()">Delete</button>
+            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1"
+                [ngpDialogTrigger]="dialog">Share</button>
+            <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1"
+                (click)="onEditClicked()">Edit</button>
+            <button flowbiteButton pill color="failure" size="sm" class="pt-1 pb-1"
+                (click)="onDeleteClicked()">Delete</button>
         </div>
         }
         }
@@ -65,3 +69,22 @@
 
     </div>
 </div>
+
+<ng-template #dialog let-close="close">
+    <div flowbiteModalOverlay>
+        <div flowbiteModal class="flex flex-col items-center gap-8">
+            <h3 flowbiteModalHeader class="text-6xl text-xl6 text-blue-500">Share</h3>
+            <div flowbiteModalContent class="flex flex-col items-center">
+                <div style="width: 256px">
+                    <qrcode class="fit-content" [qrdata]="listUrl()" [width]="256" [errorCorrectionLevel]="'M'" [elementType]="'canvas'">
+                    </qrcode>
+                </div>
+                <div flowbiteModalFooter>
+                    <a href="{{ listUrl() }}">LINK</a>
+                    <!-- This doesn't work, possibly due to tabIndex = -1 -->
+                    <!-- <div flowbiteClipboard id="clipboard" value="install me"></div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

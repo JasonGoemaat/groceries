@@ -7,6 +7,13 @@ import { LiveCollection } from '../Live';
 import { HeaderComponent } from '../header-component/header-component';
 import { Button } from 'flowbite-angular/button';
 import { Table, TableBody } from 'flowbite-angular/table';
+import {
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from 'flowbite-angular/modal';
 import { FormsModule } from '@angular/forms';
 
 // INFO: Icons
@@ -24,10 +31,28 @@ import { close } from 'flowbite-angular/icon/outline/general';
 import { provideIcons } from '@ng-icons/core';
 import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round'
 import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline'
+import { NgpDialogTrigger } from 'ng-primitives/dialog';
+import { QRCodeComponent } from 'angularx-qrcode';
+import { Clipboard } from 'flowbite-angular/clipboard';
 
 @Component({
   selector: 'app-list-page',
-  imports: [HeaderComponent, Button, Table, TableBody, FormsModule, Icon],
+  imports: [
+    HeaderComponent,
+    Button,
+    Table,
+    TableBody,
+    FormsModule,
+    Icon,
+    Modal,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    NgpDialogTrigger,
+    QRCodeComponent,
+    Clipboard,
+  ],
   templateUrl: './list-page.html',
   styleUrl: './list-page.css',
   providers: [provideIcons({ close, matCheckBoxRound, matCheckBoxOutlineBlankRound, matIndeterminateCheckBox })]
@@ -56,6 +81,9 @@ export class ListPage {
 
   // busy when performing operatoins, disables controls
   isBusy: WritableSignal<boolean> = signal(false);
+
+  // qrcode
+  listUrl: WritableSignal<string> = signal('');
   
   public constructor(
     public route: ActivatedRoute,
@@ -63,6 +91,10 @@ export class ListPage {
     public errorService: ErrorService,
   ) {
     // get 'id' parameter, error if none found
+    console.log('route url:', route.url);
+    console.log('location.href', location.href);
+    this.listUrl.set(location.href);
+
     const foundId = route.snapshot.paramMap.get('id');
     if (!foundId) {
       this.errorService.replacePage("List Not Found", "There is no 'id' present in the url '/list/:id', you shouldn't be here :)")
