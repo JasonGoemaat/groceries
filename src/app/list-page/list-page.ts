@@ -203,7 +203,7 @@ export class ListPage {
     }
 
     this.isBusy.set(true);
-    if (this.remote && this.archivedItems) {
+    if (this.remote && this.archivedItems && this.activeItems) {
       try {
         const found = this.archivedItems().find(x => x.itemName.toLocaleLowerCase() == itemName.toLocaleLowerCase())
         if (found) {
@@ -211,6 +211,12 @@ export class ListPage {
           this.isBusy.set(false);
           return updatedItem;
         } else  {
+          const foundActive = this.activeItems().find(x => x.itemName.toLocaleLowerCase() == itemName.toLocaleLowerCase())
+          if (foundActive) {
+            this.errorService.alert(`Item exists: '${itemName}`)
+            this.addingItemName.set('');
+            return undefined;
+          }
           const addedItem = await this.dataService.addItem(this.remote().id || '', itemName)
           this.isBusy.set(false);
           return <GroceryListItem>(<any>addedItem);
