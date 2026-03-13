@@ -1,0 +1,12 @@
+# This file used with `gitleaks -c gitleaks_dir.toml dir -v` to ignore files
+# that should be ignored by git when running using a working tree
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Ignored by git"
+paths = [
+    '''\.angular.*''', # from .gitignore
+    '''.*\.secret''', # from .gitignore
+]
