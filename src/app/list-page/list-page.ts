@@ -34,6 +34,7 @@ import { provideIcons } from '@ng-icons/core';
 import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round';
 import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline';
 import { bootstrapSoundwave } from '@ng-icons/bootstrap-icons';
+import { RecentItems } from './recent-items/recent-items';
 
 @Component({
   selector: 'app-list-page',
@@ -50,6 +51,7 @@ import { bootstrapSoundwave } from '@ng-icons/bootstrap-icons';
     ModalOverlay,
     NgpDialogTrigger,
     QRCodeComponent,
+    RecentItems,
   ],
   templateUrl: './list-page.html',
   styleUrl: './list-page.css',
@@ -62,6 +64,7 @@ import { bootstrapSoundwave } from '@ng-icons/bootstrap-icons';
 export class ListPage {
   // to focus element
   @ViewChild('itemName') inputElement!: ElementRef;
+  @ViewChild('recentItems') recentItemsComponent!: RecentItems;
 
   // properties to signal id and list and when we have locally and remotely
   isLoading: WritableSignal<boolean> = signal(true);
@@ -272,6 +275,7 @@ export class ListPage {
 
   public onEditClicked() {
     // TODO: open edit dialog or navigate to edit page
+    console.log('onEditClicked()');
   }
 
   /**
@@ -296,6 +300,23 @@ export class ListPage {
     // Maybe leave on server but just delete from local lists, possibly
     // store recent list of local ones and have link on home page to 
     // add them back?
+    console.log('onDelete()');
+  }
 
+  public showRecentItems() {
+    console.log('showRecentItems()');
+    if (this.recentItemsComponent) {
+      console.log('showRecentItems() - opening dialog');
+      this.recentItemsComponent.show();
+    } else {
+      console.log('showRecentItems() - component not defined');
+    }
+  }
+
+  public haveArchivedItems() : boolean {
+    if (this.archivedItems && this.archivedItems().length > 0) {
+      return true;
+    }
+    return false;
   }
 }

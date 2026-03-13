@@ -1,0 +1,30 @@
+<ng-template #dialog let-close="close">
+    <div flowbiteModalOverlay>
+        <div flowbiteModal class="flex flex-col items-center gap-8 max-h-[80vh] w-4/5">
+            <!-- <h3 flowbiteModalHeader class="text-6xl text-xl6 text-blue-500">Share</h3> -->
+            <div flowbiteModalContent class="flex flex-col items-center overflow-y-scroll w-full">
+                <h3 class="text-3xl font-bold">Recent Items</h3>
+                <div class="flex flex-row flex-wrap gap-4">
+                @for (item of items(); track item.id) {
+                    <span flowbiteBadge color="info">
+                         <button flowbiteBadgeButton (click)="unarchiveItem(item)" class="mx-0">
+                            {{ item.itemName }}
+                        </button>
+                        <button flowbiteBadgeButton class="mx-0">
+                            <flowbite-icon
+                            name="close"
+                            class="size-4 stroke-2"
+                            color="failure"
+                            (click)="deleteItem(item)" />
+                        </button>
+                    </span>
+                }
+                </div>
+            </div>
+            <div flowbiteModalFooter class="flex flex-col items-center gap-4 pt-4">
+                <p>Click name to move to active list, click 'X' to delete permanently.</p>
+                <button flowbiteButton color="info" outline class="w-full" (click)="close()">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

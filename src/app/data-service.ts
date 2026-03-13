@@ -94,4 +94,8 @@ export class DataService {
     console.log('updated item:', result);
     return <GroceryListItem>(<any>result);
   }
+
+  async deleteItem(id: string) {
+    this.pb.collection('listItems').delete(id);
+  }
 }
