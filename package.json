@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "local": "ng serve --configuration local",
+    "proxy": "ng serve --configuration proxy --verbose --serve-path /dev/ --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

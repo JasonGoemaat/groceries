@@ -1,0 +1,20 @@
+<ng-template #dialog let-close="close">
+    <div flowbiteModalOverlay>
+        <div flowbiteModal class="flex flex-col items-center gap-8">
+            <div flowbiteModalContent class="flex flex-col items-center">
+                <h3 class="text-3xl font-bold">Share</h3>
+                <div style="width: 256px" class="mb-0">
+                    <qrcode class="fit-content" [qrdata]="url()" [width]="256" [errorCorrectionLevel]="'M'"
+                        [elementType]="'canvas'">
+                    </qrcode>
+                </div>
+                <div flowbiteModalFooter class="flex flex-col items-center gap-4 pt-4">
+                    <div><a href="{{ url() }}" class="text-blue-500 break-keep">{{ url() }}</a></div>
+                    <!-- This doesn't work, possibly due to tabIndex = -1 -->
+                    <!-- <div flowbiteClipboard id="clipboard" value="install me"></div> -->
+                    <button flowbiteButton color="info" outline class="w-full" (click)="close()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

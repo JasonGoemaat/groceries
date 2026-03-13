@@ -2,7 +2,7 @@
 
 ## Quickstart
 
-Start my image pre-built image locally
+Start my pre-built image locally
 
     docker run -d -t -p 127.0.0.1:8123:8090 --name groceries ghcr.io/jasongoemaat/groceries:latest
 

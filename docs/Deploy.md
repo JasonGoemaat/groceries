@@ -24,15 +24,18 @@ image, but maps 'data' and 'migrations' to directories in my home directory:
     ~/.local/shared/containers/storage/volumes/groceries_migrations/_data
 
 The ':U' option on each volume mounts as the 'pocketbase' user, this is
-needed at least for creating collections snapshot.  The '-i' is needed for
-interactivity because the command prompts you:
+needed at least for creating collections snapshot.
+
+This command will create a collection snapshot.  The '-t' and '-i' are
+required for console display and interactivity because the command prompts
+you to enter 'Y'.
 
     podman exec -t -i  groceries /pocketbase/scripts/pb.sh migrate collections
 
 To copy the contents of `/pocketbase/migrations` locally, I go to the
 `pocketbase/migrations` folder in this repository and run this:
 
-    scp myuser@myserver:.local/share/containers/storage/volumes/groceries_migrations/_data/* .
+    scp myuser@myserver:~/.local/share/containers/storage/volumes/groceries_migrations/_data/* .
 
 You can also export and import the schema using the admin ui at `/_/`.
 The schema for my two collections 'lists' and 'listItems' are exported

@@ -7,15 +7,7 @@ import { LiveCollection } from '../Live';
 import { HeaderComponent } from '../header-component/header-component';
 import { Button } from 'flowbite-angular/button';
 import { Table, TableBody } from 'flowbite-angular/table';
-import {
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
-} from 'flowbite-angular/modal';
 import { FormsModule } from '@angular/forms';
-import { NgpDialogTrigger } from 'ng-primitives/dialog';
-import { QRCodeComponent } from 'angularx-qrcode';
 import { environment } from '../../environments/environment';
 
 // INFO: Icons
@@ -35,6 +27,7 @@ import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/materi
 import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline';
 import { bootstrapSoundwave } from '@ng-icons/bootstrap-icons';
 import { RecentItems } from './recent-items/recent-items';
+import { ShareModal } from '../reusable/share-modal/share-modal';
 
 @Component({
   selector: 'app-list-page',
@@ -45,12 +38,7 @@ import { RecentItems } from './recent-items/recent-items';
     TableBody,
     FormsModule,
     Icon,
-    Modal,
-    ModalContent,
-    ModalFooter,
-    ModalOverlay,
-    NgpDialogTrigger,
-    QRCodeComponent,
+    ShareModal,
     RecentItems,
   ],
   templateUrl: './list-page.html',
@@ -65,6 +53,7 @@ export class ListPage {
   // to focus element
   @ViewChild('itemName') inputElement!: ElementRef;
   @ViewChild('recentItems') recentItemsComponent!: RecentItems;
+  @ViewChild('shareModal') shareModal!: ShareModal;
 
   // properties to signal id and list and when we have locally and remotely
   isLoading: WritableSignal<boolean> = signal(true);
@@ -87,7 +76,7 @@ export class ListPage {
   // busy when performing operatoins, disables controls
   isBusy: WritableSignal<boolean> = signal(false);
 
-  // qrcode
+  // url for dialog when share button is pressed
   listUrl: WritableSignal<string> = signal('');
   
   public constructor(
@@ -278,6 +267,10 @@ export class ListPage {
   public onEditClicked() {
     // TODO: open edit dialog or navigate to edit page
     console.log('onEditClicked()');
+  }
+
+  public onShareClicked() {
+    this.shareModal.show();
   }
 
   /**
