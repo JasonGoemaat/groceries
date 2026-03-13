@@ -266,11 +266,13 @@ export class ListPage {
       if (found) {
         console.log(`onAddClicked() - found in archivedItems, updating:`, found)
         this.dataService.updateItem(found.id, { archived: false, done: false, sortDate: Date.now() })
+        this.addingItemName.set('');
         this.focusAddingItemName();
         return;
       }
     }
     this.addItem(this.addingItemName());
+    this.addingItemName.set('');
   }
 
   public onEditClicked() {

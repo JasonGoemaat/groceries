@@ -5,9 +5,9 @@ import { Button } from 'flowbite-angular/button';
 import { GroceryListItem } from '../../grocery-list-service';
 import { NgpDialogManager } from 'ng-primitives/dialog';
 import { DataService } from '../../data-service';
-import { icons, useIcons } from '../../../my-icons';
+// import { icons, useIcons } from '../../../my-icons';
+import { icons, useIcons } from '@src/my-icons';
 import { Icon } from 'flowbite-angular/icon';
-
 
 // SEE: https://flowbite-angular.com/docs/components/modal
 
