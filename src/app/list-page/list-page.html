@@ -18,7 +18,7 @@
         </div>
         <div class="flex flex-row gap-4 items-center" [style.visibility]="isAddingItem() ? 'visible' : 'hidden'"
             [style.height]="isAddingItem() ? 'auto' : '0px'">
-            <input #itemName enterkeyhint="add" flowbiteFormControl type="text" [(ngModel)]="addingItemName" placeholder="item name"
+            <input #itemName enterkeyhint="enter" flowbiteFormControl type="text" [(ngModel)]="addingItemName" placeholder="item name"
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-blue-500 rounded py-1 px-2 mb-3 mt-3 leading-tight focus:outline-none focus:bg-white"
                 (keyup.enter)="onAddClicked()" />
             <button flowbiteButton pill color="info" size="xs" [disabled]="isBusy() || !isAddValid()"
