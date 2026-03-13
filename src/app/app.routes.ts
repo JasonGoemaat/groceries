@@ -10,7 +10,5 @@ export const routes: Routes = [
     { path: 'lists/:id', loadComponent: () => import('./list-page/list-page').then(m => m.ListPage), },
     { path: 'test', component: Test, },
     { path: 'test/flowbite', loadComponent: () => import('./test/flowbite/flowbite').then(m => m.Flowbite), },
-    { path: 'test/grocery-list-service', loadComponent: () => import('./test/test-grocery-list-service/test-grocery-list-service').then(m => m.TestGroceryListService), },
-    { path: 'test/pocket-base', loadComponent: () => import('./test/test-pocket-base/test-pocket-base').then(m => m.TestPocketBase), },
     { path: '**', component: NotFoundPage },
 ];

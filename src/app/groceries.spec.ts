@@ -51,10 +51,10 @@ describe('Groceries', () => {
   });
 
   it('should update localStorage with changes', () => {
-    const list = [{ name: 'Test List', createdAt: new Date(), modifiedAt: new Date(), items: ['item1', 'item2'] }];
-    service.saveLists(list).then(() => {
+    const lists = [{ name: 'Test List', description: '', created: new Date(), modified: new Date(), items: ['item1', 'item2'] }];
+    service.saveLists(lists).then(() => {
       const stored = localStorage.getItem(GroceryListsKey);
-      expect(stored).toEqual(JSON.stringify(list));
+      expect(stored).toEqual(JSON.stringify(lists));
     });
   });
 
@@ -63,9 +63,7 @@ describe('Groceries', () => {
     const list = [{ name: 'Test List', createdAt: new Date(), modifiedAt: new Date(), items: ['item1', 'item2'] }];
     localStorage.setItem(GroceryListsKey, JSON.stringify(list));
     service.fetchLists().then((lists) => {
-      console.log('got lists:', { lists });
-      console.log('typeof createdAt:', typeof lists[0].createdAt);
-      expect(typeof lists[0].createdAt).toEqual('object');
+      expect(typeof lists[0].created).toEqual('object');
     });
   });
 });

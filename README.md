@@ -1,6 +1,5 @@
 # Groceries
 
-
 ## Quickstart
 
 Start my image pre-built image locally
@@ -45,7 +44,7 @@ angular environment.
 
 The file `src/environments/environment.local.ts` is ignored by source control,
 so create that file and copy the contents of the development version and
-change the POCKETBASE_URL.   Then run with this command to use that:
+change the POCKETBASE_URL.   Then run with this command:
 
     npm run local
 
@@ -61,7 +60,7 @@ I use to copy the contents of the migration file from my server to the
 local directory:
 
     PS C:\git\goemaat.com\groceries\pocketbase\migrations>
-    scp jason@fedora:.local/share/containers/storage/volumes/groceries/_data/migrations/* .
+    scp jason@fedora:~/.local/share/containers/storage/volumes/groceries_migrations/_data/* .
 
 ## Other Pages:
 

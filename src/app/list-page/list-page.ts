@@ -11,10 +11,12 @@ import {
   Modal,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
 } from 'flowbite-angular/modal';
 import { FormsModule } from '@angular/forms';
+import { NgpDialogTrigger } from 'ng-primitives/dialog';
+import { QRCodeComponent } from 'angularx-qrcode';
+import { environment } from '../../environments/environment';
 
 // INFO: Icons
 // see: https://ng-icons.github.io/ng-icons/#/browse-icons?iconset=tablerBrandGoogle
@@ -29,11 +31,9 @@ import { FormsModule } from '@angular/forms';
 import { Icon } from 'flowbite-angular/icon';
 import { close } from 'flowbite-angular/icon/outline/general';
 import { provideIcons } from '@ng-icons/core';
-import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round'
-import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline'
-import { NgpDialogTrigger } from 'ng-primitives/dialog';
-import { QRCodeComponent } from 'angularx-qrcode';
-import { Clipboard } from 'flowbite-angular/clipboard';
+import { matCheckBoxRound, matCheckBoxOutlineBlankRound } from '@ng-icons/material-icons/round';
+import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline';
+import { bootstrapSoundwave } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-list-page',
@@ -47,15 +47,17 @@ import { Clipboard } from 'flowbite-angular/clipboard';
     Modal,
     ModalContent,
     ModalFooter,
-    ModalHeader,
     ModalOverlay,
     NgpDialogTrigger,
     QRCodeComponent,
-    Clipboard,
   ],
   templateUrl: './list-page.html',
   styleUrl: './list-page.css',
-  providers: [provideIcons({ close, matCheckBoxRound, matCheckBoxOutlineBlankRound, matIndeterminateCheckBox })]
+  providers: [provideIcons({
+    close,
+    matCheckBoxRound, matCheckBoxOutlineBlankRound, matIndeterminateCheckBox,
+    bootstrapSoundwave,
+  })]
 })
 export class ListPage {
   // to focus element
@@ -91,10 +93,6 @@ export class ListPage {
     public errorService: ErrorService,
   ) {
     // get 'id' parameter, error if none found
-    console.log('route url:', route.url);
-    console.log('location.href', location.href);
-    this.listUrl.set(location.href);
-
     const foundId = route.snapshot.paramMap.get('id');
     if (!foundId) {
       this.errorService.replacePage("List Not Found", "There is no 'id' present in the url '/list/:id', you shouldn't be here :)")
@@ -102,7 +100,14 @@ export class ListPage {
     }
     const knownId = `${foundId}`;
     this.id.set(knownId);
-    console.log(`found id '${foundId}' in route params, set signal to '${this.id()}'`)
+
+    // set share url, using environment variable if specified or current url
+    if (environment.SHARE_BASE_URL) {
+      this.listUrl.set(`${environment.SHARE_BASE_URL}/lists/${foundId}`)
+    } else {
+      // not overridden, use actual location we're on
+      this.listUrl.set(location.href);
+    }
 
     // see if we have the list locally already
     const foundLocal = dataService.getLocal().find(x => x.id === foundId);
@@ -115,14 +120,10 @@ export class ListPage {
     console.log(`fetching id '${knownId}' from collection 'lists'`);
     this.dataService.pb.collection("lists").getOne(knownId)
     .then(record => {
-      console.log(`received:`, record);
       const list = <GroceryList>(record as any);
       this.remote = signal(list);
-      console.log('set remote to:', list);
       this.haveRemote.set(true);
-      console.log('set haveRemote to true');
       const newList = this.dataService.upsertList(list);
-      console.log('upserted list', newList);
       this.local = signal(newList);
       this.haveLocal.set(true);
 
@@ -152,21 +153,28 @@ export class ListPage {
     const recognition = new SpeechRecognition();
     console.log('recognition:', recognition);
 
-    // 2. Configure settings
-    recognition.lang = 'en-US'; // Set recognition language
-    recognition.continuous = false; // Stop after one phrase
-    recognition.interimResults = false; // Only return final results
-
-    // 3. Start listening
-    recognition.start();
-
-    // 4. Handle results
-    recognition.onresult = (event: any) => {
+    // 2. Handlers
+    const onSpeechResult = (event: any) => {
       console.log('SPEECH RECOGNITION RESULTS:', event.results);
       const transcript = event.results[0][0].transcript;
       console.log('Recognized text:', transcript);
       this.addItem(transcript);
+      // TODO: Stop listening?   Destroy object?
     };
+
+    const onSpeechStart = (event: any) => {
+
+    };
+
+    // 3. Configure settings
+    recognition.lang = 'en-US'; // Set recognition language
+    recognition.continuous = false; // Stop after one phrase
+    recognition.interimResults = false; // Only return final results
+    recognition.onaudiostart = onSpeechStart;
+    recognition.onresult = onSpeechResult;
+
+    // 4. Start listening
+    recognition.start();
   }
 
   public async toggleDone(item: GroceryListItem) {
@@ -193,14 +201,20 @@ export class ListPage {
     if (itemName.length < 2 || itemName.length > 80) {
       this.errorService.alert("Name must be between 2 and 80 characters");
     }
+
     this.isBusy.set(true);
-    if (this.remote) {
+    if (this.remote && this.archivedItems) {
       try {
-        const result = await this.dataService.addItem(this.remote().id || '', itemName)
-        console.log(`addItem('${itemName}'):`, result)
-        this.focusAddingItemName();
-        this.isBusy.set(false);
-        return <GroceryListItem>(<any>result);
+        const found = this.archivedItems().find(x => x.itemName.toLocaleLowerCase() == itemName.toLocaleLowerCase())
+        if (found) {
+          var updatedItem = await this.dataService.updateItem(found.id, { archived: false, done: false, sortDate: Date.now() })
+          this.isBusy.set(false);
+          return updatedItem;
+        } else  {
+          const addedItem = await this.dataService.addItem(this.remote().id || '', itemName)
+          this.isBusy.set(false);
+          return <GroceryListItem>(<any>addedItem);
+        }
       } catch (error) {
         this.isBusy.set(false);
         this.errorService.replacePage("An Error Occurred", "adding item to database failed", `${error}`);
@@ -242,7 +256,7 @@ export class ListPage {
       const found = this.archivedItems().find(x => x.itemName.toLocaleLowerCase() == this.addingItemName().toLocaleLowerCase())
       if (found) {
         console.log(`onAddClicked() - found in archivedItems, updating:`, found)
-        this.dataService.updateItem(found.id, { archived: false, sortDate: Date.now() })
+        this.dataService.updateItem(found.id, { archived: false, done: false, sortDate: Date.now() })
         this.focusAddingItemName();
         return;
       }
@@ -254,10 +268,28 @@ export class ListPage {
     // TODO: open edit dialog or navigate to edit page
   }
 
-  public onDeleteClicked() {
+  /**
+   * Finish list, mark all active items as archived.
+   */
+  public onFinishClicked() {
+    if (this.activeItems) {
+      const promises = this.activeItems().map(item => {
+        return this.dataService.updateItem(item.id, { archived: true, sortDate: Date.now() });
+      })
+      Promise.all(promises).then(x => {
+        console.log('Archived all active items in list');
+      })
+    }
+  }
+
+  /**
+   * TODO: call from edit maybe
+   */
+  public onDelete() {
     // TODO: confirm delete (confirm() or dialog?), delete items then list
     // Maybe leave on server but just delete from local lists, possibly
     // store recent list of local ones and have link on home page to 
     // add them back?
+
   }
 }

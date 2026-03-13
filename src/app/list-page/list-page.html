@@ -18,7 +18,7 @@
         <div class="flex flex-row gap-4 items-center p-4 rounded-4xl">
             <button flowbiteButton pill color="info" size="sm" class="pt-1 pb-1">Recent</button>
             <button flowbiteButton pill color="info" size="sm" class="pt-1 pb-1"
-                (click)="onVoiceClicked()">Voice</button>
+                (click)="onVoiceClicked()"><flowbite-icon name="bootstrapSoundwave"  class="text-white block size-6 stroke-2" /></button>
         </div>
         <div class="flex flex-row gap-4 items-center" [style.visibility]="isAddingItem() ? 'visible' : 'hidden'"
             [style.height]="isAddingItem() ? 'auto' : '0px'">
@@ -59,28 +59,28 @@
             <button flowbiteButton pill outline color="info" size="sm" class="pt-1 pb-1"
                 (click)="onEditClicked()">Edit</button>
             <button flowbiteButton pill color="failure" size="sm" class="pt-1 pb-1"
-                (click)="onDeleteClicked()">Delete</button>
+                (click)="onFinishClicked()">Finish</button>
         </div>
         }
         }
         } @else {
         <p class="mt-2">loading...</p>
         }
-
     </div>
 </div>
 
 <ng-template #dialog let-close="close">
     <div flowbiteModalOverlay>
         <div flowbiteModal class="flex flex-col items-center gap-8">
-            <h3 flowbiteModalHeader class="text-6xl text-xl6 text-blue-500">Share</h3>
+            <!-- <h3 flowbiteModalHeader class="text-6xl text-xl6 text-blue-500">Share</h3> -->
             <div flowbiteModalContent class="flex flex-col items-center">
+                <h3 class="text-3xl font-bold">Share</h3>
                 <div style="width: 256px">
                     <qrcode class="fit-content" [qrdata]="listUrl()" [width]="256" [errorCorrectionLevel]="'M'" [elementType]="'canvas'">
                     </qrcode>
                 </div>
                 <div flowbiteModalFooter>
-                    <a href="{{ listUrl() }}">LINK</a>
+                    <a href="{{ listUrl() }}">{{ listUrl() }}</a>
                     <!-- This doesn't work, possibly due to tabIndex = -1 -->
                     <!-- <div flowbiteClipboard id="clipboard" value="install me"></div> -->
                 </div>

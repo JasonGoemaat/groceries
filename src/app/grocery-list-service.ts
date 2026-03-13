@@ -47,7 +47,6 @@ export class GroceryListService {
   async getLists(): Promise<Signal<GroceryList[]>> {
     // TODO: fetch lists from LocalStorage
     const rawLists = await this.dataService.pb.collection("lists").getFullList();
-    console.log('got rawLists:', rawLists);
     return signal(<GroceryList[]><unknown>rawLists);
   }
 
@@ -95,11 +94,8 @@ export class GroceryListItems {
 
   async init() {
     const filter = `DERP=="${this.groceryList.id}"`;
-    console.log("Fetching items with filter", filter);
     this.dataService.pb.collection("listItems").getFullList({
       filter: filter
-    }).then((result) => {
-      console.log(result);
     }).catch((error) => {
       console.error(error);
     });
