@@ -83,7 +83,7 @@
                     <div><a href="{{ listUrl() }}" class="text-blue-500">{{ listUrl() }}</a></div>
                     <!-- This doesn't work, possibly due to tabIndex = -1 -->
                     <!-- <div flowbiteClipboard id="clipboard" value="install me"></div> -->
-                    <button flowbiteButton color="info" outline class="w-full">Close</button>
+                    <button flowbiteButton color="info" outline class="w-full" (click)="close()">Close</button>
                 </div>
             </div>
         </div>
