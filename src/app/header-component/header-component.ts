@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Button } from 'flowbite-angular/button';
 import { Icon } from 'flowbite-angular/icon';
 import { icons, useAllIcons } from '@src/my-icons';
+import { environment } from '@src/environments/environment';
 import {
   provideFlowbiteSidebarState,
   Sidebar,
@@ -26,6 +27,7 @@ import {
 })
 export class HeaderComponent {
   sidebarOpen = signal(false);
+  showFlowbite = signal(!environment.production);
   sidebar = ViewChild('sidebar');
 
   toggleSidebar() {
