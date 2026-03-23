@@ -1,5 +1,62 @@
-<div class="flex flex-col gap-4 items-center w-full">
-    <h1 class="text-6xl text-white text-center w-full my-bg-dark p-4 rounded-4xl font-bold">
+<!-- <div style="width: 400px; height: 400px; background-color: blue; position: absolute; top: 0; left: 0;">
+  <div flowbiteSidebarContent>
+    <li>
+      <a flowbiteSidebarItem>
+        <flowbite-icon name="chartPie" />
+        Dashboard
+      </a>
+    </li>
+    <li>
+      <a flowbiteSidebarItem>
+        <flowbite-icon name="drawSquare" />
+        Kanban
+      </a>
+    </li>
+    <li>
+      <a flowbiteSidebarItem>
+        <flowbite-icon name="inbox" />
+        Inbox
+      </a>
+    </li>
+    <li>
+      <a flowbiteSidebarItem>
+        <flowbite-icon name="users" />
+        Users
+      </a>
+    </li>
+    <li>
+      <a flowbiteSidebarItem>
+        <flowbite-icon name="cart" />
+        Products
+      </a>
+    </li>
+    <li>
+      <a flowbiteSidebarItem>Sign In</a>
+    </li>
+    <li>
+      <a flowbiteSidebarItem>Sign Up</a>
+    </li>
+  </div>
+</div> -->
+<div class="bg-white justify-between flex flex-row gap-4 items-center w-full h-16 items-center">
+    <flowbite-icon (click)="toggleSidebar()" name="matMenu" class="w-8 mx-4 cursor-pointer"></flowbite-icon>
+    <h1 class="text-2xl text-blue text-center font-bold">
         <a [routerLink]="['/']">Groceries</a>
     </h1>
+    <flowbite-icon (click)="toggleSidebar()" name="none" class="w-8 mx-4"></flowbite-icon>
 </div>
+
+<aside #sidebar [class.open]="sidebarOpen()" [class.closed]="!sidebarOpen()"
+    style="position: absolute; z-index: 100; top: 0; left: 0;" class="sidebar-container mt-16">
+    <div class="sidebar-content bg-white p-2 text-lg pr-4">
+        <a [routerLink]="['/']" class="mb-1 px-1 text-blue flex flex-row items-center gap-4 p-1 hover:text-blue-800 hover:bg-gray-100 cursor-pointer">
+            Home
+        </a>
+        <a [routerLink]="['/', 'about']" class="mb-1 px-1 text-blue flex flex-row items-center gap-4 p-1 hover:text-blue-800 hover:bg-gray-100 cursor-pointer">
+            About
+        </a>
+        <a [routerLink]="['/', 'test', 'flowbite']"class="mb-1 px-1 text-blue flex flex-row items-center gap-4 p-1 hover:text-blue-800 hover:bg-gray-100 cursor-pointer">
+            Flowbite
+        </a>
+    </div>
+</aside>

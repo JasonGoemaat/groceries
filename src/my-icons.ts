@@ -3,10 +3,13 @@
  * should be imported here.
  */
 import { close } from 'flowbite-angular/icon/outline/general';
+import { matMenu } from '@ng-icons/material-icons/baseline';
 import { provideIcons } from '@ng-icons/core';
 
 export const icons = {
-    close,
+    close, matMenu,
 }
 
 export const useIcons = provideIcons;
+export const useAllIcons = () => provideIcons(icons);
+
