@@ -1,0 +1,33 @@
+.sidebar-container {
+    visibility: hidden;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-container.closed {
+    visibility: hidden;
+    transition: visibility 0.3s linear allow-discrete;
+}
+
+.sidebar-container.open {
+    visibility: visible;
+    transition: visibility 0.3s linear allow-discrete;
+    /* no transition-property: display here, visible right away */
+}
+
+.sidebar-container.closed .sidebar-content {
+    transform: translateX(-100%); /* Moves the element its full width to the left of the viewport */
+    transition: transform 0.3s ease-out;
+}
+
+.sidebar-container.open .sidebar-content {
+    transform: translateX(0); /* Moves the element its full width to the left of the viewport */
+    transition: transform 0.3s ease-in;
+}
+
+.sidebar-content {
+    height: 100vh;
+}
+
+.sidebar-container li a {
+}
