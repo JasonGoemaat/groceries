@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Button } from 'flowbite-angular/button';
 import { Card, CardContent, CardHeader } from 'flowbite-angular/card';
 import { FormField, Label, FormControl, Helper } from 'flowbite-angular/form';
+import { Theme } from 'flowbite-angular/theme-toggle';
 
 @Component({
   selector: 'app-flowbite',
@@ -31,6 +32,12 @@ export class Flowbite {
     <p flowbiteHelper>...</p>
   </div>
 </form>`,
+  }
+
+  public constructor(
+    public theme: Theme
+  ) {
+    console.log(theme);
   }
 }
 

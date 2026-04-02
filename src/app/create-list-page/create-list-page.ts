@@ -1,6 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from '../header-component/header-component';
 import { DataService } from '../data-service';
 import { FormControl, FormField, Helper, Label } from 'flowbite-angular/form';
 import { Button } from 'flowbite-angular/button';
@@ -8,7 +7,7 @@ import { ErrorService } from '../error-service';
 
 @Component({
   selector: 'app-create-list-page',
-  imports: [HeaderComponent, FormField, Label, FormControl, Helper, Button, FormsModule],
+  imports: [FormField, Label, FormControl, Helper, Button, FormsModule],
   templateUrl: './create-list-page.html',
   styleUrl: './create-list-page.css',
 })

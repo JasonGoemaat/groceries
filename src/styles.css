@@ -41,3 +41,7 @@
   --color-mine-900: oklch(0.45 0.095 128.67);
   --color-mine-950: oklch(0.29 0.062 128.48);
 }
+
+.my-blue-bg {
+  background-color: blue;
+}
