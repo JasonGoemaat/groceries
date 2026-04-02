@@ -6,17 +6,12 @@ import { icons, useAllIcons } from '@src/my-icons';
 import { environment } from '@src/environments/environment';
 import {
   provideFlowbiteSidebarState,
-  Sidebar,
-  SidebarContent,
-  SidebarItem,
-  SidebarToggle,
 } from 'flowbite-angular/sidebar';
 
 @Component({
-  selector: 'app-header-component',
+  selector: 'app-header',
   imports: [RouterLink,
-    Button, Icon,
-    Sidebar, SidebarContent, SidebarItem, SidebarToggle,
+    Icon,
   ],
   templateUrl: './header-component.html',
   styleUrl: './header-component.css',

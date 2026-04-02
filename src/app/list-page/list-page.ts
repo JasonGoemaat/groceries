@@ -4,7 +4,6 @@ import { DataService, LocalGroceryList } from '../data-service';
 import { GroceryList, GroceryListItem } from '../grocery-list-service';
 import { ErrorService } from '../error-service';
 import { LiveCollection } from '../Live';
-import { HeaderComponent } from '../header-component/header-component';
 import { Button } from 'flowbite-angular/button';
 import { Table, TableBody } from 'flowbite-angular/table';
 import { FormsModule } from '@angular/forms';
@@ -28,11 +27,11 @@ import { matIndeterminateCheckBox } from '@ng-icons/material-icons/baseline';
 import { bootstrapSoundwave } from '@ng-icons/bootstrap-icons';
 import { RecentItems } from './recent-items/recent-items';
 import { ShareModal } from '../reusable/share-modal/share-modal';
+import { ContentComponent } from '../reusable/content-component/content-component';
 
 @Component({
   selector: 'app-list-page',
   imports: [
-    HeaderComponent,
     Button,
     Table,
     TableBody,
@@ -40,6 +39,7 @@ import { ShareModal } from '../reusable/share-modal/share-modal';
     Icon,
     ShareModal,
     RecentItems,
+    ContentComponent,
   ],
   templateUrl: './list-page.html',
   styleUrl: './list-page.css',

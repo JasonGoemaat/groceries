@@ -1,3 +1,4 @@
+<app-content>
 <div class="flex flex-col items-center px-4">
     <div class="flex flex-col items-center mt-8 p-4 rounded-4xl">
         @if (haveLocal() && local) {
@@ -63,3 +64,4 @@
 
 <app-share-modal #shareModal [url]="listUrl()"></app-share-modal>
 <app-recent-items #recentItems [items]="archivedItems ? archivedItems() : []"></app-recent-items>
+</app-content>
