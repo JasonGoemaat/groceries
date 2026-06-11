@@ -67,3 +67,62 @@ local directory:
 * [GithubAction](docs/GithubAction.md) - Explains the github action and how
     to setup variables to deploy to your own server using SSH and the
     github container registry (ghcr.io)
+
+## My Server
+
+Container: `ghcr.io/jasongoemaat/groceries:latest`
+
+Enable running containers without login:
+
+    sudo loginctl enable-linger <myuser>
+
+This is an older deprecated way:
+
+    ## NOTE:   Deprecated
+    See: https://www.redhat.com/en/blog/container-systemd-persist-reboot
+    mkdir -p ~/.config/systemd/user
+    cd ~/.config/systemd/user
+    podman generate systemd --new --files --name groceries
+
+Now they want you to use Quadlets:
+
+    ## NOTE: /etc/containers/systemd for root user
+    mkdir -p ~/.config/containers/systemd
+    cd ~/.config/containers/systemd
+
+Then create my file `groceries.container`:
+
+```
+[Unit]
+Description=Groceries App
+After=network-online.target
+
+[Container]
+Image=ghcr.io/jasongoemaat/groceries:latest
+Environment=POCKETBASE_ENCRYPTION_KEY=[SECRET]
+Environment=POCKETBASE_ADMIN_EMAIL=[SECRET]
+Environment=POCKETBASE_ADMIN_PASSWORD=[SECRET]
+PublishPort=3004:8090
+Volume=groceries_data:/pocketbase/data:U
+Volume=groceries_migrations:/pocketbase/migrations:U
+
+[Service]
+Restart=always
+```
+
+> NOTE: Make sure any manually created 'groceries' container has been stopped
+and removed.  These commands will generate a 'systemd-groceries' container,
+but if you use the same ports as your manually-created pod, it will fail and
+may be a little tricky to debug.
+
+Then run this command to create the USER service:
+
+    systemctl --user daemon-reload
+
+And then you can start it and check the status:
+
+    systemctl --user start groceries
+    systemctl --user status groceries
+
+Well, I can start it manually, but when I `sudo reboot` it failed to start.
+I had to ssh in and `systemctl --user start groceries` to get it running. :(
