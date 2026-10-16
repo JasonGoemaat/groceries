@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from './cookie-service';
 import PocketBase from "pocketbase";
 import { environment } from '../environments/environment';
 import { GroceryList, GroceryListItem } from './grocery-list-service';
@@ -18,7 +19,8 @@ export class DataService {
   public pb = new PocketBase(environment.POCKETBASE_URL);
 
   public constructor(
-    public router: Router
+    public router: Router,
+    public cookieService: CookieService,
   ) {
   }
 
@@ -40,6 +42,21 @@ export class DataService {
         localStorage.removeItem("groceries:lists");
       }
     }
+    let cookieLists = this.cookieService.get('groceries_lists');
+    if (cookieLists) {
+      try {
+        const parsed = <LocalGroceryList[]>JSON.parse(cookieLists);
+        if (Array.isArray(parsed)) {
+          for (const item of parsed) {
+            if (!lists.find(x => x.id === item.id)) {
+              lists.push(item);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('ERROR parsing cookie "groceries_lists"', error);
+      }
+    }
     return lists;
   }
 
@@ -55,6 +72,7 @@ export class DataService {
     const record = await this.pb.collection("lists").create({ name, description });
     lists.unshift({ id: record.id, name: (record as any).name, alias: alias || name })
     localStorage.setItem("groceries:lists", JSON.stringify(lists));
+    this.cookieService.set('groceries_lists', JSON.stringify(lists));
     this.router.navigate(["/lists", record.id]);
   }
 
@@ -74,6 +92,7 @@ export class DataService {
     const localList = { id: `${list.id}`, name: list.name, alias };
     lists.unshift(localList)
     localStorage.setItem("groceries:lists", JSON.stringify(lists));
+    this.cookieService.set('groceries_lists', JSON.stringify(lists));
     return localList;
   }
 

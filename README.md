@@ -32,6 +32,8 @@ can update collections using the admin UI and it will update the code.
 4. Visit the displayed url, changing `0.0.0.0:8090` to `127.0.0.1:8123` to
     setup an admin user.
 
+For my testing I use `admin@example.com` password `Simple9003$`
+
 In the future you can start and stop the container:
 
     docker stop groceries1
